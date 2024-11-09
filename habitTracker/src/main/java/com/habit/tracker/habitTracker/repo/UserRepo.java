@@ -8,5 +8,7 @@ import com.habit.tracker.habitTracker.model.Users;
 @Repository
 public interface UserRepo extends JpaRepository<Users,Integer> {
 
+	Users findByUserID(String userID);
+
 }
 
