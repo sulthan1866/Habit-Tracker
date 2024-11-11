@@ -9,21 +9,24 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const isUser = async () => {
-    try {
-      const result = await axios.post(
-        `${
-          import.meta.env.VITE_BASE_BE
-        }/login?userID=${userID}&password=${password}`
-      );
+  const addUser = async () => {
+    if (userID === "" || password === "")
+      setErrorMessage("Fill in the fields to register");
+    else
+      try {
+        const result = await axios.post(
+          `${
+            import.meta.env.VITE_BASE_BE
+          }/register?userID=${userID}&password=${password}`
+        );
 
-      if (result.status == 202) {
-        setErrorMessage(null);
-        navigate("/home");
+        if (result.status == 202) {
+          setErrorMessage(null);
+          navigate("/login");
+        }
+      } catch {
+        setErrorMessage("User with this user id already exixts");
       }
-    } catch {
-      setErrorMessage("User ID or password is incorrect. Please try again.");
-    }
   };
 
   return (
@@ -31,7 +34,7 @@ const Login = () => {
       <div className="row justify-content-center">
         <div className="col-md-4">
           <div className="card p-4 shadow">
-            <h3 className="text-center mb-4">Login</h3>
+            <h3 className="text-center mb-4">Register</h3>
             {errorMessage && (
               <div className="alert alert-danger text-center" role="alert">
                 {errorMessage}
@@ -48,6 +51,7 @@ const Login = () => {
                 className="form-control"
                 placeholder="Enter your User ID"
                 autoFocus
+                required
               />
             </div>
             <div className="mb-3">
@@ -60,21 +64,12 @@ const Login = () => {
                 type="password"
                 className="form-control"
                 placeholder="Enter your Password"
+                required
               />
             </div>
-            <button onClick={isUser} className="btn btn-primary w-100 mb-2">
-              Login
+            <button onClick={addUser} className="btn btn-primary w-100 mb-2">
+              Create New Account
             </button>
-            <div className="text-center mb-2">
-              <a href="#" className="text-decoration-none">
-                Forgot Password?
-              </a>
-            </div>
-            <div className="text-center">
-              <button className="btn btn-outline-secondary w-100">
-                Create New Account
-              </button>
-            </div>
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@ public class Habit {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int habitID;
-	private int uid;
+	private String userID;
 	private String name;
 	private int numerOfDays;
 	private int currDay;
@@ -33,8 +33,8 @@ public class Habit {
 	private Day[] days;
 	
 	public Habit() {}
-	public Habit(int uid,String name,int numberOfDays) {
-		this.uid=uid;
+	public Habit(String userID,String name,int numberOfDays) {
+		this.userID=userID;
 		this.name=name;
 		this.numerOfDays=numberOfDays;
 		this.days=new Day[numberOfDays];
@@ -44,6 +44,21 @@ public class Habit {
 	
 	public int getHabitID() {
 		return this.habitID;
+	}
+	public String getUserID() {
+		return this.userID;
+	}
+	public String getName() {
+		return this.name;
+	}
+	public int getNumberOfDays() {
+		return this.numerOfDays;
+	}
+	public int getCurrDay() {
+		return this.currDay;
+	}
+	public Day[] getDays() {
+		return this.days;
 	}
 	public void addDay(Day days) {
 		this.days[this.currDay]=days;
