@@ -17,10 +17,10 @@ const Login = () => {
         const result = await axios.post(
           `${
             import.meta.env.VITE_BASE_BE
-          }/register?userID=${userID}&password=${password}`
+          }/register`,{'userID':userID,'password':password}
         );
 
-        if (result.status == 202) {
+        if (result.status == 201) {
           setErrorMessage(null);
           navigate("/login");
         }

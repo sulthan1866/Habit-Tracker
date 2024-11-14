@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Menu from "./Menu";
 
 interface Users {
@@ -25,6 +25,7 @@ interface Habit {
 }
 
 const Home = () => {
+  const{userID} = useParams<{userID:string}>()
   const [userdata, setUserData] = useState<Users>();
   const [habits, setHabits] = useState<Habit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -36,8 +37,11 @@ const Home = () => {
   useEffect(() => {
     try {
       const habit_tracker_userID_token = sessionStorage.getItem("habit_tracker_userID_token");
+      if(habit_tracker_userID_token!=userID){
+        throw new Error;
+      }
       const userDetails = axios.get(
-        `${import.meta.env.VITE_BASE_BE}/user-details/${habit_tracker_userID_token}`
+        `${import.meta.env.VITE_BASE_BE}/user-details/${userID}`
       );
       userDetails
         .then((resp) => {
@@ -60,12 +64,15 @@ const Home = () => {
 
       navigate("/login");
     }
-  }, [navigate]);
+  }, [navigate,userID]);
   useEffect(() => {
     try {
       const habit_tracker_userID_token = sessionStorage.getItem("habit_tracker_userID_token");
+      if(habit_tracker_userID_token!=userID){
+        throw new Error;
+      }
       const userDetails = axios.get(
-        `${import.meta.env.VITE_BASE_BE}/habits/${habit_tracker_userID_token}`
+        `${import.meta.env.VITE_BASE_BE}/habits/${userID}`
       );
       userDetails
         .then((resp) => {
@@ -88,7 +95,7 @@ const Home = () => {
 
       navigate("/login");
     }
-  }, [navigate]);
+  }, [navigate,userID]);
 
   if(loading)return <h1>LOADING</h1>
   if(error)return <h1>ERROR</h1>
@@ -100,7 +107,7 @@ const Home = () => {
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
         heading={userdata?.userID}
-        options={["nigga1", "nigga2"]}
+        options={["1", "2"]}
         onClicks={[]}
       ></Menu>
 

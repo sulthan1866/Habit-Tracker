@@ -18,13 +18,13 @@ const Login = () => {
         const result = await axios.post(
           `${
             import.meta.env.VITE_BASE_BE
-          }/login?userID=${userID}&password=${password}`
+          }/login`,{'userID':userID,'password':password}
         );
 
         if (result.status == 202) {
           setErrorMessage(null);
           sessionStorage.setItem('habit_tracker_userID_token',userID);
-          navigate("/home");
+          navigate(`/${userID}`);
         }
       } catch {
         setErrorMessage("User ID or password is incorrect. Please try again.");

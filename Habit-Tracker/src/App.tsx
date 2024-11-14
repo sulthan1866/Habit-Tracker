@@ -9,10 +9,11 @@ const App =()=> {
     <>
       <Router>
         <Routes>
+
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register/>}/>
-          <Route path="/home" element={<Home />}/>
-          <Route path={`/home/:habitID`} element={<Habit/>}/>
+          <Route path="/:userID" element={<Home />}/>
+          <Route path={`/:userID/:habitID`} element={<Habit/>}/>
         </Routes>
       </Router>
     </>

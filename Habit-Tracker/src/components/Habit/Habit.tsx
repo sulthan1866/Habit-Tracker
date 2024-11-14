@@ -32,6 +32,7 @@ const Habit = () => {
     const [error, setError] = useState<boolean>(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const {habitID }= useParams<{habitID:string}>()
+    const {userID }= useParams<{userID:string}>()
     const[tasks,setTasks] = useState<string[]>();
     const[note,setNote] = useState<string>();
     const[date,setDate] = useState<Date>();
@@ -42,8 +43,11 @@ const Habit = () => {
     useEffect(() => {
       try {
         const habit_tracker_userID_token = sessionStorage.getItem("habit_tracker_userID_token");
+        if(habit_tracker_userID_token!=userID){
+          throw new Error;
+        }
         const userDetails = axios.get(
-          `${import.meta.env.VITE_BASE_BE}/user-details/${habit_tracker_userID_token}`
+          `${import.meta.env.VITE_BASE_BE}/user-details/${userID}`
         );
         userDetails
           .then((resp) => {
@@ -66,7 +70,7 @@ const Habit = () => {
   
         navigate("/login");
       }
-    }, [navigate]);
+    }, [navigate,userID]);
     useEffect(() => {
       try {
         const habit_tracker_userID_token = sessionStorage.getItem("habit_tracker_userID_token");
@@ -113,8 +117,8 @@ const Habit = () => {
       menuOpen={menuOpen}
       setMenuOpen={setMenuOpen}
       heading={userdata?.userID}
-      options={["Home", "nigga2"]}
-      onClicks={[()=>{navigate('/home')},()=>{return}]}
+      options={["Home", "2"]}
+      onClicks={[()=>{navigate(`/${userID}`)},()=>{return}]}
     ></Menu>
 
     {/* Main Content */}
