@@ -3,7 +3,7 @@ INSERT INTO users ( HABITIDS, NUMBER_OF_HABITS, PASSWORD, USERID) VALUES
 ( array[0, 0, 0, 0, 0], 0, '$2a$12$IpjjxaqimxiRlOCpZVJQ..Y0RLfJMrBPhy3e8Xu3l3808SoDYF5Yi', 'jhon'),
 ( array[3, 4, 5, 0, 0], 3, '$2a$12$qmZgVgp.ygMBc79dy5c.euDL.IB7xzhow22p.rYp24LZnCVARvfSy', 'smith');
 
-INSERT INTO habit (HABITID, CURR_DAY, DAYS, NAME, NUMER_OF_DAYS, USERID)
+INSERT INTO habit (HABITID, CURR_DAY, DAYS, NAME, NUMBER_OF_DAYS, USERID)
 VALUES
 (1, 3, '[{"tasks":["sing"],"note":"sang","date":0},{"tasks":["sing"],"note":"sang","date":0},{"tasks":["sing"],"note":"sang","date":0},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]', 'singing', 30, 'sulthan'),
 (2, 0, '[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]', 'dancing', 120, 'sulthan'),

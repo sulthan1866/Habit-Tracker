@@ -16,28 +16,28 @@ import com.habit.tracker.habitTracker.model.Users;
 import com.habit.tracker.habitTracker.service.GetService;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/v1/{userID}")
 @CrossOrigin
 public class GetController {
 	
 	@Autowired
 	GetService getService;
 	
-    @GetMapping("/user-details/{userID}")
+    @GetMapping("/user-details")
     public ResponseEntity<Users> getUserDetails(@PathVariable String userID){
        Users user = getService.getUserByID(userID);
        if(user==null)return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        else return new ResponseEntity<>(user,HttpStatus.OK);
     }
     
-    @GetMapping("/habits/{userID}")
+    @GetMapping("/habits")
     public ResponseEntity<List<Habit>> getHabits(@PathVariable String userID){
        List<Habit> habits = getService.getHabitsByID(userID);
        if(habits==null)return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        else return new ResponseEntity<>(habits,HttpStatus.OK);
     }
     
-    @GetMapping("/habits/{userID}/{habitID}")
+    @GetMapping("/habits/{habitID}")
     public ResponseEntity<Habit> getHabit(@PathVariable String userID,@PathVariable int habitID){
     	Habit habit = getService.getHabitByUserIDAndHabitID(userID,habitID);
     	if(habit==null)return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -15,9 +15,8 @@ const Login = () => {
     else
       try {
         const result = await axios.post(
-          `${
-            import.meta.env.VITE_BASE_BE
-          }/register`,{'userID':userID,'password':password}
+          `${import.meta.env.VITE_BASE_API_URL_V1}/register`,
+          { userID: userID, password: password }
         );
 
         if (result.status == 201) {

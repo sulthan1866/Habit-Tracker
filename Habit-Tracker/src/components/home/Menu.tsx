@@ -11,7 +11,7 @@ interface Props {
 const Menu = ({ menuOpen, setMenuOpen ,heading,options,onClicks}: Props) => {
   const navigate = useNavigate();
   const logout = () => {
-    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("habit_tracker_userID_token");
     navigate("/login");
   };
 

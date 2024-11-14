@@ -25,7 +25,7 @@ public class Habit {
 	private int habitID;
 	private String userID;
 	private String name;
-	private int numerOfDays;
+	private int numberOfDays;
 	private int currDay;
 
 	@Convert(converter=DaysConverter.class)
@@ -36,7 +36,7 @@ public class Habit {
 	public Habit(String userID,String name,int numberOfDays) {
 		this.userID=userID;
 		this.name=name;
-		this.numerOfDays=numberOfDays;
+		this.numberOfDays=numberOfDays;
 		this.days=new Day[numberOfDays];
 		this.currDay=0;
 		
@@ -52,7 +52,7 @@ public class Habit {
 		return this.name;
 	}
 	public int getNumberOfDays() {
-		return this.numerOfDays;
+		return this.numberOfDays;
 	}
 	public int getCurrDay() {
 		return this.currDay;

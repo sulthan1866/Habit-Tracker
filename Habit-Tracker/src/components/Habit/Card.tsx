@@ -42,7 +42,7 @@ function Card({ tasks, note,setNote, date, isVisibile,setVisibility }: Props) {
                           </button>
                         </div><div className="col-9"></div>
                         <div className="col-1">
-                            <button className="btn btn-danger" onClick={()=>{setVisibility(!isVisibile)}}>X</button>
+                            <button className="btn btn-danger" onClick={()=>{setVisibility(false)}}>X</button>
                         </div>
                       </div>
                     <h4>{(date)?date.toString():"Locked"}</h4>

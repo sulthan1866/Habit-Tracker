@@ -10,20 +10,19 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const isUser = async () => {
-    setuserID(userID.trim())
+    setuserID(userID.trim());
     if (userID === "" || password === "")
       setErrorMessage("Fill in the fields to Login");
     else
       try {
         const result = await axios.post(
-          `${
-            import.meta.env.VITE_BASE_BE
-          }/login`,{'userID':userID,'password':password}
+          `${import.meta.env.VITE_BASE_API_URL_V1}/login`,
+          { userID: userID, password: password }
         );
 
         if (result.status == 202) {
           setErrorMessage(null);
-          sessionStorage.setItem('habit_tracker_userID_token',userID);
+          sessionStorage.setItem("habit_tracker_userID_token", userID);
           navigate(`/${userID}`);
         }
       } catch {

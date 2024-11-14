@@ -47,7 +47,7 @@ const Habit = () => {
           throw new Error;
         }
         const userDetails = axios.get(
-          `${import.meta.env.VITE_BASE_BE}/user-details/${userID}`
+          `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/user-details`
         );
         userDetails
           .then((resp) => {
@@ -73,9 +73,8 @@ const Habit = () => {
     }, [navigate,userID]);
     useEffect(() => {
       try {
-        const habit_tracker_userID_token = sessionStorage.getItem("habit_tracker_userID_token");
         const userDetails = axios.get(
-          `${import.meta.env.VITE_BASE_BE}/habits/${habit_tracker_userID_token}/${habitID}`
+          `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/habits/${habitID}`
         );
         userDetails
           .then((resp) => {
@@ -98,7 +97,7 @@ const Habit = () => {
   
         navigate("/login");
       }
-    }, [navigate,habitID]);
+    }, [navigate,habitID,userID]);
 
     const onStageSelect = (day:number)=>{
         setTasks(habit?.days[day].tasks);

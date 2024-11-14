@@ -14,7 +14,7 @@ import com.habit.tracker.habitTracker.service.LoginService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/")
+@RequestMapping("/api/v1")
 public class LoginController {
 	
 	@Autowired
