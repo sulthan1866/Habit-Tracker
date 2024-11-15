@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.habit.tracker.habitTracker.model.Day;
 import com.habit.tracker.habitTracker.model.Habit;
 import com.habit.tracker.habitTracker.model.Users;
 import com.habit.tracker.habitTracker.repo.HabitsRepo;
