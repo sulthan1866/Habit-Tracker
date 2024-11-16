@@ -68,7 +68,6 @@ const Home = () => {
     } catch {
       setLoading(false);
       setError(true);
-
       navigate("/login");
     }
   }, [navigate, userID]);
@@ -125,20 +124,23 @@ const Home = () => {
       ></Menu>
 
       {/* Main Content */}
-      
+
       <div
         className={`flex-grow-1 ms-auto ${menuOpen ? "content-shifted" : ""}`}
         style={{ overflowX: "auto", whiteSpace: "nowrap", padding: "20px" }}
       >
         {/* Scrollable Content */}
-        
+
         <div className="d-inline-flex mt-5">
-        {isAdding && (
-        <div style={{ position: "absolute", alignSelf: "center" }} className="m-auto d-flex justify-content-center">
-          <AddHabit setAdding={setAdding} />
-        </div>
-      )}
-          {!isAdding && habits.map((habit) => (
+          {isAdding && (
+            <div
+              style={{ position: "absolute", alignSelf: "center" }}
+              className="col-12 mt-4 d-flex justify-content-center"
+            >
+              <AddHabit setAdding={setAdding} isAdding={isAdding} />
+            </div>
+          )}
+          {habits.map((habit) => (
             <div
               id="habit-holder"
               key={habit.habitID}

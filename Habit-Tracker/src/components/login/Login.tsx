@@ -8,6 +8,7 @@ const Login = () => {
   const [userID, setuserID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loging, setLoging] = useState<boolean>(false);
 
   const isUser = async () => {
     setuserID(userID.trim());
@@ -15,6 +16,7 @@ const Login = () => {
       setErrorMessage("Fill in the fields to Login");
     else
       try {
+        setLoging(true);
         const result = await axios.post(
           `${import.meta.env.VITE_BASE_API_URL_V1}/login`,
           { userID: userID, password: password }
@@ -27,6 +29,8 @@ const Login = () => {
         }
       } catch {
         setErrorMessage("User ID or password is incorrect. Please try again.");
+      } finally {
+        setLoging(false);
       }
   };
 
@@ -68,8 +72,12 @@ const Login = () => {
                 required
               />
             </div>
-            <button onClick={isUser} className="btn btn-primary w-100 mb-2">
-              Login
+            <button
+              disabled={loging}
+              onClick={isUser}
+              className="btn btn-primary w-100 mb-2"
+            >
+              {loging ? "Loging..." : "Login"}
             </button>
             <div className="text-center mb-2">
               <a href="#" className="text-decoration-none">

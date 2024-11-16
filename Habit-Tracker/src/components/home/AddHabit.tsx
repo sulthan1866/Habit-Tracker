@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
+import { Modal } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 interface Props {
   setAdding: React.Dispatch<React.SetStateAction<boolean>>;
+  isAdding: boolean;
 }
 
-const AddHabit = ({ setAdding }: Props) => {
+const AddHabit = ({ setAdding, isAdding }: Props) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [createdMessage, setCreatedMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -15,7 +17,7 @@ const AddHabit = ({ setAdding }: Props) => {
   const [newHabitDays, setNewHabitDays] = useState<number>(0);
   const addHabit = async () => {
     setCreatedMessage(null);
-    setErrorMessage(null)
+    setErrorMessage(null);
     if (newHabit == "" || newHabitDays == 0) {
       setErrorMessage("Fill in the fields");
     } else if (newHabitDays < 21 || newHabitDays > 400) {
@@ -45,10 +47,13 @@ const AddHabit = ({ setAdding }: Props) => {
   return (
     <>
       <div className="container mt-5">
-        <div className="row justify-content-center">
-          <div className="col-md-4">
-            <div className="card p-4 shadow">
-              <h3 className="text-center mb-4">Add Habit</h3>
+        <Modal
+          show={isAdding}
+          backdrop="static"
+          className="row justify-content-center"
+        >
+          <div className="col">
+            <div className="card p-4 shadow ">
               <div
                 style={{ cursor: "pointer" }}
                 className="d-flex justify-content-end btn-danger btn ms-auto"
@@ -58,6 +63,7 @@ const AddHabit = ({ setAdding }: Props) => {
               >
                 X
               </div>
+              <h3 className="text-center mb-4">Add Habit</h3>
               {errorMessage && (
                 <div className="alert alert-danger text-center" role="alert">
                   {errorMessage}
@@ -82,7 +88,9 @@ const AddHabit = ({ setAdding }: Props) => {
               <div className="mb-3">
                 <label className="form-label">Number Of Days</label>
                 <input
-                  onChange={(e) => setNewHabitDays(Number.parseInt( e.target.value,10))}
+                  onChange={(e) =>
+                    setNewHabitDays(Number.parseInt(e.target.value, 10))
+                  }
                   type="number"
                   className="form-control"
                   placeholder="Enter number of days"
@@ -92,13 +100,13 @@ const AddHabit = ({ setAdding }: Props) => {
               <button
                 disabled={loading}
                 onClick={addHabit}
-                className="btn btn-primary w-100 mb-2"
+                className="btn btn-primary m-auto"
               >
                 {loading ? "Adding..." : "Add new Habit"}
               </button>
             </div>
           </div>
-        </div>
+        </Modal>
       </div>
     </>
   );

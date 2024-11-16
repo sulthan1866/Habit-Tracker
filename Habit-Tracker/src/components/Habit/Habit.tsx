@@ -27,7 +27,13 @@ interface Habit {
 
 const Habit = () => {
   const [userdata, setUserData] = useState<Users>();
-  const [habit, setHabit] = useState<Habit>();
+  const [habit, setHabit] = useState<Habit>({
+    userID: "",
+    name: "",
+    numberOfDays: -1,
+    days: [],
+    currDay: -1,
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -37,6 +43,7 @@ const Habit = () => {
   const [tasks, setTasks] = useState<string[]>();
   const [note, setNote] = useState<string>();
   const [date, setDate] = useState<Date>();
+  const [thisDay, setThisDay] = useState<number>(-1);
   const [isCardVisibile, setCardVisibility] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -110,7 +117,7 @@ const Habit = () => {
       if (result.status == 200) {
         setMessage("Habit deleted successfully");
         setTimeout(() => {
-          navigate(`/${userID}`)
+          navigate(`/${userID}`);
         }, 3000);
       }
     } catch {
@@ -119,17 +126,27 @@ const Habit = () => {
   };
 
   const onStageSelect = (day: number) => {
+    setCardVisibility(true);
+    setThisDay(day);
+    if (day == habit?.currDay) {
+      setTasks([]);
+      setNote(undefined);
+      setDate(new Date());
+      return;
+    }
     setTasks(habit?.days[day].tasks);
     setNote(habit?.days[day].note);
     setDate(habit?.days[day].date);
-    setCardVisibility(true);
   };
 
   if (loading) return <h1>LOADING</h1>;
   if (error) return <h1>ERROR</h1>;
 
   return (
-    <div className="d-flex vh-100 position-relative">
+    <div
+      style={{ display: isCardVisibile ? "block" : "none" }}
+      className="d-flex vh-100 position-relative"
+    >
       {/* Sidebar */}
       <div className="row">
         <div className="col">
@@ -142,16 +159,19 @@ const Habit = () => {
               () => {
                 navigate(`/${userID}`);
               },
-               deleteHabit,
+              deleteHabit,
             ]}
           ></Menu>
         </div>
         <div className="col">
-        {message && (
-            <div className="alert alert-info text-center mb-auto" role="alert">
+          {message && (
+            <div className="alert alert-light text-center mb-auto" role="alert">
               {message}
             </div>
           )}
+        </div>
+        <div className="col">
+          <div className="card p-3">Day={habit?.currDay}</div>
         </div>
       </div>
 
@@ -164,25 +184,32 @@ const Habit = () => {
         <div className="d-flex justify-content-center shadow">
           <Card
             tasks={tasks}
+            setTasks={setTasks}
             note={note}
             setNote={setNote}
             date={date}
+            setDate={setDate}
             isVisibile={isCardVisibile}
             setVisibility={setCardVisibility}
+            thisDay={thisDay}
+            currDay={habit.currDay}
           ></Card>
         </div>
         {/* Scrollable Content */}
         <div className="d-inline-flex mt-5 d-flex align-items-center vh-100">
           {[...Array(habit?.numberOfDays)].map((_, i) => (
             <div
+              key={i}
               onClick={() => {
                 onStageSelect(i);
               }}
             >
-              <Stage num={i < habit?.currDay ? `${i + 1}` : "🔒"}></Stage>
+              <Stage
+                num={i <= habit?.currDay ? `${i + 1}` : "🔒"}
+                currDay={habit?.currDay}
+              ></Stage>
             </div>
           ))}
-          
         </div>
       </div>
     </div>

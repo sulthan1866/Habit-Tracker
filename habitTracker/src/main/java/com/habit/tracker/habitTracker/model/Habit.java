@@ -41,34 +41,8 @@ public class Habit {
 		
 	}
 	
-	// public int getHabitID() {
-	// 	return this.habitID;
-	// }
-	// public String getUserID() {
-	// 	return this.userID;
-	// }
-	// public String getName() {
-	// 	return this.name;
-	// }
-	// public int getNumberOfDays() {
-	// 	return this.numberOfDays;
-	// }
-	// public int getCurrDay() {
-	// 	return this.currDay;
-	// }
-	// public Day[] getDays() {
-	// 	return this.days;
-	// }
 	public void addDay(Day days) {
 		this.days[this.currDay]=days;
 		this.currDay+=1;
 	}
-//	public String toString() {
-//		return "id = "+habitID+
-//				"   name = "+name+
-//				"   days = "+numerOfDays+
-//				"   uid = "+uid+
-//				"   day = "+days[0].toString();
-//				
-//	}
 }

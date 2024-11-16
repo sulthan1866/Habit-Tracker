@@ -8,12 +8,14 @@ const Login = () => {
   const [userID, setuserID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [registering, setRegistering] = useState<boolean>(false);
 
   const addUser = async () => {
     if (userID === "" || password === "")
       setErrorMessage("Fill in the fields to register");
     else
       try {
+        setRegistering(true);
         const result = await axios.post(
           `${import.meta.env.VITE_BASE_API_URL_V1}/register`,
           { userID: userID, password: password }
@@ -25,6 +27,8 @@ const Login = () => {
         }
       } catch {
         setErrorMessage("User with this user id already exixts");
+      } finally {
+        setRegistering(false);
       }
   };
 
@@ -66,8 +70,12 @@ const Login = () => {
                 required
               />
             </div>
-            <button onClick={addUser} className="btn btn-primary w-100 mb-2">
-              Create New Account
+            <button
+              disabled={registering}
+              onClick={addUser}
+              className="btn btn-primary w-100 mb-2"
+            >
+              {registering ? "Creating your Account" : "Create New Account"}
             </button>
           </div>
         </div>
