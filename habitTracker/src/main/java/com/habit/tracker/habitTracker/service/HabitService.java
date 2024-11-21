@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 import com.habit.tracker.habitTracker.model.Day;
 import com.habit.tracker.habitTracker.model.Habit;
 import com.habit.tracker.habitTracker.repo.HabitsRepo;
+
 import java.util.List;
+
+import java.time.*;
+import java.util.concurrent.*;
 
 @Service
 public class HabitService {
@@ -15,8 +19,11 @@ public class HabitService {
 	HabitsRepo repo;
 
 	public List<Habit> getHabitsByID(String userID) {
-
-		return repo.findByUserID(userID);
+		try {
+			return repo.findByUserID(userID);
+		} catch (Exception e) {
+			return null;
+		}
 
 	}
 
@@ -29,14 +36,39 @@ public class HabitService {
 		return repo.save(habit);
 	}
 
+	public Habit updateHabit(String userID, int habitID, int thisDay, Day day) {
+		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
+		habit.setDay(day, thisDay);
+		return repo.save(habit);
+	}
+
 	public void deleteHabitByID(int habitID) {
 		repo.deleteById(habitID);
 	}
 
-	public Habit updateHabit(String userID,int habitID, Day day) {
-		Habit habit = repo.findByUserIDAndHabitID(userID,habitID);
-		habit.addDay(day);
-		return repo.save(habit);
+	public long moveNextStage(String userID, int habitID, String timeZone) {
+
+		ZoneId zoneId = ZoneId.of(timeZone);
+		ZonedDateTime now = ZonedDateTime.now(zoneId);
+		ZonedDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay(zoneId);
+
+		long timeTillMidnight = Duration.between(now, midnight).toMillis();
+
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+		scheduler.schedule(() -> {
+			try {
+				Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
+				habit.setCurrDay(habit.getCurrDay() + 1);
+				repo.save(habit);
+			} finally {
+				scheduler.shutdown();
+			}
+
+		}, timeTillMidnight, TimeUnit.MILLISECONDS);
+
+		return timeTillMidnight;
+
 	}
 
 }

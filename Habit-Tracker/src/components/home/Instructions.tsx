@@ -1,14 +1,12 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 interface Props {
-  children: string;
+  children: ReactNode;
   title: string;
-  after: string;
-  onAfter: () => void;
 }
 
-const Instructions = ({ children, title, after, onAfter }: Props) => {
+const Instructions = ({ children, title }: Props) => {
   const [show, setShow] = useState<boolean>(false);
 
   return (
@@ -20,7 +18,7 @@ const Instructions = ({ children, title, after, onAfter }: Props) => {
           setShow(true);
         }}
       >
-        Open Card
+        <h5>🛈</h5>
       </Button>
 
       {/* Modal overlay */}
@@ -29,11 +27,6 @@ const Instructions = ({ children, title, after, onAfter }: Props) => {
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{children}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={onAfter}>
-            {after}
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

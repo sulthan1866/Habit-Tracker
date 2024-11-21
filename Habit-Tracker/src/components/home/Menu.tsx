@@ -28,7 +28,7 @@ const Menu = ({ menuOpen, setMenuOpen, heading, options, onClicks }: Props) => {
           setMenuOpen(!menuOpen);
         }}
       >
-        {menuOpen ? "Close Menu" : "Open Menu"}
+        {"☰"}
       </button>
       <div
         className={`position-fixed top-0 h-100 bg-dark text-white ${
