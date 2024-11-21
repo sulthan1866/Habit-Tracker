@@ -1,6 +1,9 @@
 package com.habit.tracker.habitTracker.controller;
 
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +32,9 @@ public class HabitController {
 	@GetMapping("/habits")
 	public ResponseEntity<List<Habit>> getHabits(@PathVariable String userID) {
 		List<Habit> habits = habitService.getHabitsByID(userID);
-		if (habits == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		else
+		if (habits == null) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else
 			return new ResponseEntity<>(habits, HttpStatus.OK);
 	}
 
@@ -56,13 +59,25 @@ public class HabitController {
 
 	}
 
-	@PutMapping("/habits/{habitID}")
-	public ResponseEntity<Habit> updateHabit(@PathVariable String userID,@PathVariable int habitID, @RequestBody Day day) {
-		Habit updatedHabit = habitService.updateHabit(userID,habitID, day);
+	@PutMapping("/habits/{habitID}/{thisDay}")
+	public ResponseEntity<Habit> updateHabit(@PathVariable String userID, @PathVariable int habitID,
+			@PathVariable int thisDay, @RequestBody Day day) {
+		Habit updatedHabit = habitService.updateHabit(userID, habitID, thisDay, day);
 		if (updatedHabit != null)
 			return new ResponseEntity<>(updatedHabit, HttpStatus.ACCEPTED);
 		else
 			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+	}
+
+	@PutMapping("/habits/{habitID}/next")
+	public ResponseEntity<Long> moveNextStage(@PathVariable String userID, @PathVariable int habitID,
+			@RequestBody Map<String, String> timeZoneBody) {
+		String timeZone = timeZoneBody.get("timeZone");
+		if (!ZoneId.getAvailableZoneIds().contains(timeZone))
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		long timeTillMidnight = habitService.moveNextStage(userID, habitID, timeZone);
+
+		return new ResponseEntity<>(timeTillMidnight, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/habits/{habitID}")

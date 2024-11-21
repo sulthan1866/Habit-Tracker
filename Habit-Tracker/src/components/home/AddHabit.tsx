@@ -15,6 +15,7 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
   const { userID } = useParams<{ userID: string }>();
   const [newHabit, setNewHabit] = useState<string>("");
   const [newHabitDays, setNewHabitDays] = useState<number>(0);
+
   const addHabit = async () => {
     setCreatedMessage(null);
     setErrorMessage(null);
@@ -32,7 +33,7 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
 
         if (result.status == 201) {
           setErrorMessage(null);
-          setCreatedMessage("Habit added successfully");
+          setCreatedMessage(`Habit added successfully: ${newHabit} for ${newHabitDays} days`);
           setNewHabit(result.data.name);
           setNewHabitDays(result.data.numberOfDays);
         }
@@ -43,6 +44,7 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
         setLoading(false);
       }
   };
+  
 
   return (
     <>
@@ -59,6 +61,7 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
                 className="d-flex justify-content-end btn-danger btn ms-auto"
                 onClick={() => {
                   setAdding(false);
+                  location.reload()
                 }}
               >
                 X
