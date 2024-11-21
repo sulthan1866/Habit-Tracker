@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        
+        
+
+        {
+            "type": "java",
+            "name": "Spring Boot-HabitTrackerApplication<habitTracker>",
+
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.habit.tracker.habitTracker.HabitTrackerApplication",
+            "projectName": "habitTracker",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
