@@ -12,10 +12,7 @@
     "./src/components/home/instructions.tsx",
     "./src/components/home/menu.tsx",
     "./src/components/login/login.tsx",
-    "./src/components/login/register.tsx",
-    "./src/components/pickcard.tsx",
-    "./src/components/error/loading/message.tsx",
-    "./src/components/error/loading/pickmess.tsx"
+    "./src/components/login/register.tsx"
   ],
   "version": "5.6.2"
 }
