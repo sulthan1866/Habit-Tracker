@@ -8,11 +8,10 @@ import org.springframework.stereotype.Repository;
 import com.habit.tracker.habitTracker.model.Habit;
 
 @Repository
-public interface HabitsRepo extends JpaRepository<Habit,Integer> {
+public interface HabitsRepo extends JpaRepository<Habit, Long> {
 
 	List<Habit> findByUserID(String userID);
 
-	Habit findByUserIDAndHabitID(String userID, int habitID);
-	
+	Habit findByUserIDAndHabitID(String userID, Long habitID);
 
 }

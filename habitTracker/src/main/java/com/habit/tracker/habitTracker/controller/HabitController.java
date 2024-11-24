@@ -32,45 +32,40 @@ public class HabitController {
 	@GetMapping("/habits")
 	public ResponseEntity<List<Habit>> getHabits(@PathVariable String userID) {
 		List<Habit> habits = habitService.getHabitsByID(userID);
-		if (habits == null) {
+		if (habits == null)
 			return new ResponseEntity<>(HttpStatus.OK);
-		} else
-			return new ResponseEntity<>(habits, HttpStatus.OK);
+		return new ResponseEntity<>(habits, HttpStatus.OK);
 	}
 
 	@GetMapping("/habits/{habitID}")
-	public ResponseEntity<Habit> getHabit(@PathVariable String userID, @PathVariable int habitID) {
+	public ResponseEntity<Habit> getHabit(@PathVariable String userID, @PathVariable Long habitID) {
 		Habit habit = habitService.getHabitByUserIDAndHabitID(userID, habitID);
 		if (habit == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		else
-			return new ResponseEntity<>(habit, HttpStatus.OK);
+		return new ResponseEntity<>(habit, HttpStatus.OK);
 	}
 
 	@PostMapping("/habits")
 	public ResponseEntity<Habit> addHabit(@PathVariable String userID, @RequestBody Habit newHabit) {
 
 		Habit habit = habitService.addHabit(userID, newHabit.getName(), newHabit.getNumberOfDays());
-		if (habit != null) {
+		if (habit != null)
 			return new ResponseEntity<>(habit, HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
 
 	@PutMapping("/habits/{habitID}/{thisDay}")
-	public ResponseEntity<Habit> updateHabit(@PathVariable String userID, @PathVariable int habitID,
+	public ResponseEntity<Habit> updateHabit(@PathVariable String userID, @PathVariable Long habitID,
 			@PathVariable int thisDay, @RequestBody Day day) {
 		Habit updatedHabit = habitService.updateHabit(userID, habitID, thisDay, day);
 		if (updatedHabit != null)
 			return new ResponseEntity<>(updatedHabit, HttpStatus.ACCEPTED);
-		else
-			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 
 	@PutMapping("/habits/{habitID}/next")
-	public ResponseEntity<Long> moveNextStage(@PathVariable String userID, @PathVariable int habitID,
+	public ResponseEntity<Long> moveNextStage(@PathVariable String userID, @PathVariable Long habitID,
 			@RequestBody Map<String, String> timeZoneBody) {
 		String timeZone = timeZoneBody.get("timeZone");
 		if (!ZoneId.getAvailableZoneIds().contains(timeZone))
@@ -80,16 +75,20 @@ public class HabitController {
 		return new ResponseEntity<>(timeTillMidnight, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/habits/{habitID}")
-	public ResponseEntity<HttpStatus> deleteHabitByID(@PathVariable int habitID) {
-
-		try {
-			habitService.deleteHabitByID(habitID);
+	@PutMapping("/habits/{habitID}/{thisDay}/complete")
+	public ResponseEntity<HttpStatus> completeDay(@PathVariable String userID, @PathVariable Long habitID,
+			@PathVariable int thisDay) {
+		Habit habit = habitService.completeDay(userID, habitID, thisDay);
+		if (habit.getDays()[thisDay].isCompleted())
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 
+	}
+
+	@DeleteMapping("/habits/{habitID}")
+	public ResponseEntity<HttpStatus> deleteHabitByID(@PathVariable Long habitID) {
+		habitService.deleteHabitByID(habitID);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

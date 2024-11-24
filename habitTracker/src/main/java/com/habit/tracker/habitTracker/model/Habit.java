@@ -20,7 +20,7 @@ public class Habit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int habitID;
+	private Long habitID;
 	private String userID;
 	private String name;
 	private int numberOfDays;

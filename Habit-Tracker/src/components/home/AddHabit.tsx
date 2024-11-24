@@ -4,11 +4,13 @@ import { Modal } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 interface Props {
+  reload: boolean;
+  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   setAdding: React.Dispatch<React.SetStateAction<boolean>>;
   isAdding: boolean;
 }
 
-const AddHabit = ({ setAdding, isAdding }: Props) => {
+const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [createdMessage, setCreatedMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,6 +25,8 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
       setErrorMessage("Fill in the fields");
     } else if (newHabitDays < 21 || newHabitDays > 400) {
       setErrorMessage("please enter number of days between 21 and 400 days");
+    } else if (newHabit.length > 25) {
+      setErrorMessage("please keep habit name below 25 characters");
     } else
       try {
         setLoading(true);
@@ -33,7 +37,9 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
 
         if (result.status == 201) {
           setErrorMessage(null);
-          setCreatedMessage(`Habit added successfully: ${newHabit} for ${newHabitDays} days`);
+          setCreatedMessage(
+            `Habit added successfully: ${newHabit} for ${newHabitDays} days`
+          );
           setNewHabit(result.data.name);
           setNewHabitDays(result.data.numberOfDays);
         }
@@ -44,7 +50,6 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
         setLoading(false);
       }
   };
-  
 
   return (
     <>
@@ -61,7 +66,7 @@ const AddHabit = ({ setAdding, isAdding }: Props) => {
                 className="d-flex justify-content-end btn-danger btn ms-auto"
                 onClick={() => {
                   setAdding(false);
-                  location.reload()
+                  setReload(!reload);
                 }}
               >
                 X

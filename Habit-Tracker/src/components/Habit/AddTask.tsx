@@ -3,10 +3,10 @@ import { useState } from "react";
 interface Props {
   tasks: string[];
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
-  setChanges:React.Dispatch<React.SetStateAction<boolean>>;
+  setChanges: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddTask = ({ tasks, setTasks ,setChanges}: Props) => {
+const AddTask = ({ tasks, setTasks, setChanges }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const load = () => {
     if (tasks) {
@@ -26,28 +26,29 @@ const AddTask = ({ tasks, setTasks ,setChanges}: Props) => {
     const taskElement = document.createElement("div");
     const delBtn = document.createElement("button");
     delBtn.textContent = "X";
-    delBtn.classList.add("btn", "btn-danger",'card-title');
+    delBtn.classList.add("btn", "btn-danger", "card-title");
     delBtn.onclick = () => {
-    if(delBtn.textContent=="X"){
-      delBtn.textContent="?"
-      return;
-    }
+      if (delBtn.textContent == "X") {
+        delBtn.textContent = "?";
+        return;
+      }
       taskElement?.remove();
       setTasks(tasks.filter((task) => task != text));
-      setChanges(true)
+      setChanges(true);
     };
-    delBtn.onblur=()=>{
-      delBtn.textContent="X"
-    }
+    delBtn.onblur = () => {
+      delBtn.textContent = "X";
+    };
     taskElement.textContent = text;
-    taskElement.classList.add( "bg-light",'rounded','pt-1','px-1','m-1');
+    taskElement.classList.add("bg-light", "rounded", "pt-1", "px-1", "m-1");
     taskElement.appendChild(delBtn);
     panel?.appendChild(taskElement);
     if (!task) {
       tasks?.push(newTask.value);
       setTasks(tasks);
       newTask.value = "";
-      setChanges(true)
+      setChanges(true);
+      newTask.focus();
     }
   };
   return (

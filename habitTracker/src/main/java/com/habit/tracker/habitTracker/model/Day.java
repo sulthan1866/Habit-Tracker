@@ -9,40 +9,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Day implements Serializable{
-	
-	/**
-	 * 
-	 */
+public class Day implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	private String[] tasks;
 	private String note;
 	private Date date;
-	
-	// public Day(String[] tasks,String note,Date date) {
-	// 	this.tasks=tasks;
-	// 	this.note = note;
-	// 	this.date = date;
-	// }
-	// public String[] getTasks() {
-	// 	return this.tasks;
-	// }
-	// public String getNote() {
-	// 	return this.note;
-	// }
-	// public Date getDate() {
-	// 	return this.date;
-	// }
-	
-//	public String toString() {
-//		return tasks.toString()+"    "+
-//				note+"     "+
-//				date;
-//	}
-	
+	private boolean isCompleted;
+
 }
