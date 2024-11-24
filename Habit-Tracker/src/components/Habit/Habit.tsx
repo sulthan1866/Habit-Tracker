@@ -8,14 +8,13 @@ import Instructions from "../home/Instructions";
 
 interface Users {
   userID: string;
-  habitIDs: number[];
-  numberOfHabits: number;
 }
 
 interface Day {
   tasks: string[];
   note: string;
   date: Date;
+  completed: boolean;
 }
 
 interface Habit {
@@ -40,10 +39,12 @@ const Habit = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const { habitID } = useParams<{ habitID: string }>();
+  const [reload, setReload] = useState(false);
   const { userID } = useParams<{ userID: string }>();
   const [tasks, setTasks] = useState<string[]>([]);
   const [note, setNote] = useState<string>();
   const [date, setDate] = useState<Date>(new Date());
+  const [completed, setCompleted] = useState<boolean>(false);
   const [thisDay, setThisDay] = useState<number>(-1);
   const [isCardVisibile, setCardVisibility] = useState<boolean>(false);
 
@@ -64,7 +65,7 @@ const Habit = () => {
 
       <h5>📊 How to Track Your Progress</h5>
       <p>
-        - Click on the next stage (marked in white) and select <b>Load</b> to
+        - Click on the next stage (marked in blue) and select <b>Load</b> to
         retrieve any previously scheduled tasks.
       </p>
       <p>
@@ -90,6 +91,17 @@ const Habit = () => {
         <b>Delete Habit</b>. Confirm the deletion, and the habit will be removed
         from your list.
       </p>
+    </>
+  );
+
+  const wonMessage = (
+    <>
+      <p>
+        🎉 Congratulations on completing {habit.name} for {habit.numberOfDays}{" "}
+        days! You can start a new habit or continue building on this one by
+        adding a new habit under the same name. 💪
+      </p>
+      <p>Check out your badge in home page</p>
     </>
   );
 
@@ -143,7 +155,7 @@ const Habit = () => {
 
       navigate("/login");
     }
-  }, [navigate, userID, habitID]);
+  }, [navigate, userID, habitID, reload]);
 
   const deleteHabit = async () => {
     const confirmDelete = confirm(
@@ -171,6 +183,11 @@ const Habit = () => {
 
     setTasks(habit?.days[day] ? habit?.days[day].tasks : []);
     setNote(habit?.days[day] ? habit?.days[day].note : "");
+    setCompleted(
+      habit?.days[habit.currDay - 1]
+        ? habit?.days[habit.currDay - 1].completed
+        : false
+    );
     if (day == habit?.currDay) {
       setDate(new Date(new Date()));
       date.setDate(new Date().getDate() + 1);
@@ -190,8 +207,18 @@ const Habit = () => {
           {message}
         </div>
       )}
-      <div className="d-flex justify-content-end m-3">
-        <Instructions title={habit.name}>{instruction}</Instructions>
+      <div className="row">
+        <div className="col-8"></div>
+        <div className="col-1 d-flex justify-content-end m-auto mt-3">
+          <Instructions title={habit.name}>{instruction}</Instructions>
+        </div>
+        {habit.currDay >= habit.numberOfDays + 1 && (
+          <div className="col-1 d-flex justify-content-end m-auto mt-3">
+            <Instructions title={`${habit.name} - Completed 🎉`}>
+              {wonMessage}
+            </Instructions>
+          </div>
+        )}
       </div>
       <div
         style={{ display: isCardVisibile ? "block" : "none" }}
@@ -225,15 +252,20 @@ const Habit = () => {
         >
           <div className="d-flex justify-content-center shadow">
             <Card
+              reload={reload}
+              setReload={setReload}
               tasks={tasks}
               setTasks={setTasks}
               note={note}
               setNote={setNote}
               date={date}
+              completed={completed}
+              setCompleted={setCompleted}
               isVisibile={isCardVisibile}
               setVisibility={setCardVisibility}
               thisDay={thisDay}
               currDay={habit.currDay}
+              numberOfDays={habit.numberOfDays}
             ></Card>
           </div>
           {/* Scrollable Content */}

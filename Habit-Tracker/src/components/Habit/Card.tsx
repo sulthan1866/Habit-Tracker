@@ -6,27 +6,37 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 interface Props {
+  reload: boolean;
+  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   tasks: string[];
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
   note: string | undefined;
   setNote: React.Dispatch<React.SetStateAction<string | undefined>>;
   date: Date;
+  completed: boolean;
+  setCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   isVisibile: boolean;
   setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
   thisDay: number;
   currDay: number;
+  numberOfDays: number;
 }
 
 function Card({
+  reload,
+  setReload,
   tasks,
   setTasks,
   note,
   setNote,
   date,
+  completed,
+  setCompleted,
   isVisibile,
   setVisibility,
   thisDay,
   currDay,
+  numberOfDays,
 }: Props) {
   const [isflipped, flip] = useState<boolean>(false);
   const { userID } = useParams<{ userID: string }>();
@@ -34,7 +44,8 @@ function Card({
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState<boolean>(false);
   const [hasChanges, setChanges] = useState<boolean>(false);
-  const [isCompleted, setCompleted] = useState<boolean>(false);
+  const [isMovingNext, setMovingNext] = useState<boolean>(false);
+  const [habitCompleting, setHabitCompleting] = useState<boolean>(false);
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const CardStyle: React.CSSProperties = {
@@ -57,9 +68,10 @@ function Card({
       if (result.status == 202) {
         setMessage("Saved");
         setChanges(false);
+        setReload(!reload);
       }
     } catch {
-      setMessage("Error");
+      setMessage("Failed to save");
     } finally {
       setSaving(false);
       setTimeout(() => {
@@ -72,7 +84,7 @@ function Card({
     if (!hasChanges) {
       setVisibility(false);
     } else if (!message) {
-      setMessage("There are some un saved changes.(save at notes side)");
+      setMessage("There are some un saved changes.");
       setTimeout(() => {
         setMessage(null);
       }, 5000);
@@ -81,34 +93,54 @@ function Card({
       setChanges(false);
     }
   };
-  const completed = async () => {
+  const completedAsync = async () => {
     const nextElement = document.getElementById("next") as HTMLButtonElement;
     nextElement.onblur = () => (nextElement.textContent = "Completed ?");
     if (nextElement.textContent == "Completed ?") {
       nextElement.textContent = "Did you?";
       return;
     }
-    setMessage(
-      "Todays tasks are completed ,schedule for tommorow. keep going!!!"
+    const result = await axios.put(
+      `${
+        import.meta.env.VITE_BASE_API_URL_V1
+      }/${userID}/habits/${habitID}/${thisDay}/complete`
     );
-    nextElement.disabled = true;
-    setCompleted(true);
+
+    if (result.status == 200) {
+      setMessage(
+        "Todays tasks are completed ,schedule for tommorow. keep going!!!"
+      );
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+      setCompleted(true);
+      setReload(!reload);
+    }
   };
   const moveNext = async () => {
-    if (!isCompleted && thisDay != 0) {
+    if (!completed && thisDay != 0) {
       setMessage("Complete today's tasks to save it");
       setTimeout(() => {
         setMessage(null);
       }, 5000);
       return;
-    } else if (!message && hasChanges) {
-      setMessage("There are some un saved changes.(save at notes side)");
+    }
+    if (hasChanges) {
+      setMessage("There are some un saved changes.");
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+      return;
+    }
+    if (tasks.length == 0) {
+      setMessage("Add tasks to save !");
       setTimeout(() => {
         setMessage(null);
       }, 5000);
       return;
     }
     setChanges(false);
+    setMovingNext(true);
     const r = await axios.put(
       `${
         import.meta.env.VITE_BASE_API_URL_V1
@@ -120,7 +152,34 @@ function Card({
       setInterval(() => {
         setMessage(null);
       }, 5000);
+      setMovingNext(false);
+    } else {
+      setMessage("Try again later");
+      setInterval(() => {
+        setMessage(null);
+      }, 5000);
+      setMovingNext(false);
     }
+  };
+
+  const habitCompleted = async () => {
+    setHabitCompleting(true);
+    const result = await axios.put(
+      `${
+        import.meta.env.VITE_BASE_API_URL_V1
+      }/${userID}/habits/${habitID}/complete`
+    );
+    if (result.status == 200) {
+      setMessage("Checkout new info ! on top right corner");
+      setHabitCompleting(false);
+      setReload(!reload);
+    } else {
+      setMessage("process failed");
+      setHabitCompleting(false);
+    }
+    setInterval(() => {
+      setMessage(null);
+    }, 5000);
   };
 
   return (
@@ -175,7 +234,8 @@ function Card({
                           <button
                             id="next"
                             className="btn btn-success ms-2"
-                            onClick={completed}
+                            onClick={completedAsync}
+                            disabled={completed}
                           >
                             {"Completed ?"}
                           </button>
@@ -195,7 +255,7 @@ function Card({
                                   type="checkbox"
                                 />
                               )}
-                              <label className=" col">{tasks}</label>
+                              <label className=" col">{task}</label>
                             </div>
                           )
                       )}
@@ -214,9 +274,20 @@ function Card({
                       <button
                         onClick={moveNext}
                         className="btn btn-success mt-2"
+                        disabled={isMovingNext}
                       >
                         Are you doing all these tommorow ?
                       </button>
+                      <br />
+                      <div className="d-flex justify-content-end">
+                        <button
+                          className="btn m-1 me-5 btn-info"
+                          disabled={saving}
+                          onClick={save}
+                        >
+                          {saving ? "saving..." : "save"}
+                        </button>
+                      </div>
                     </>
                   )}
                 </div>
@@ -270,6 +341,17 @@ function Card({
                           >
                             {saving ? "saving..." : "save"}
                           </button>
+                          {currDay == numberOfDays && completed && (
+                            <button
+                              className="btn m-1 btn-success"
+                              onClick={habitCompleted}
+                              disabled={habitCompleting}
+                            >
+                              {habitCompleting
+                                ? "processing..."
+                                : "complete habit"}
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

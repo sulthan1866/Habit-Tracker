@@ -1,0 +1,71 @@
+.badge {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin: 10px;
+    cursor: default;
+}
+.badge-info {
+    position: absolute;
+    top: 100%; /* Position below the trigger */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1000;
+}
+
+.badge:hover .badge-info,
+.badge:focus-within .badge-info {
+    opacity: 1;
+    visibility: visible;
+}
+
+.badge-info::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #333 transparent;
+}
+
+.badge-gold {
+    background: linear-gradient(145deg, #FFD700, #FFC107);
+    color: black;
+    border: 2px solid #B8860B;
+}
+
+.badge-silver {
+    background: linear-gradient(145deg, #C0C0C0, #A9A9A9);
+    color: black;
+    border: 2px solid #808080;
+}
+
+.badge-bronze {
+    background: linear-gradient(145deg, #CD7F32, #A97142);
+    color: white;
+    border: 2px solid #8B4513;
+}
+
+.badge-novice {
+    background: linear-gradient(145deg, #808080, #696969);
+    color: white;
+    border: 2px solid #4F4F4F;
+}

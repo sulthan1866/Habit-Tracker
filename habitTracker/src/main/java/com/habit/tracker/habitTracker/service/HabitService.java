@@ -18,6 +18,9 @@ public class HabitService {
 	@Autowired
 	HabitsRepo repo;
 
+	@Autowired
+	UserService userService;
+
 	public List<Habit> getHabitsByID(String userID) {
 		try {
 			return repo.findByUserID(userID);
@@ -27,40 +30,52 @@ public class HabitService {
 
 	}
 
-	public Habit getHabitByUserIDAndHabitID(String userID, int habitID) {
+	public Habit getHabitByUserIDAndHabitID(String userID, Long habitID) {
 		return repo.findByUserIDAndHabitID(userID, habitID);
 	}
 
 	public Habit addHabit(String userID, String name, int numberOfDays) {
-		Habit habit = new Habit(userID, name, numberOfDays);
-		return repo.save(habit);
+		if (userService.getUserByID(userID) != null) {
+			Habit habit = new Habit(userID, name, numberOfDays);
+			return repo.save(habit);
+		}
+		return null;
 	}
 
-	public Habit updateHabit(String userID, int habitID, int thisDay, Day day) {
+	public Habit updateHabit(String userID, Long habitID, int thisDay, Day day) {
 		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
 		habit.setDay(day, thisDay);
 		return repo.save(habit);
 	}
 
-	public void deleteHabitByID(int habitID) {
+	public void deleteHabitByID(Long habitID) {
 		repo.deleteById(habitID);
 	}
 
-	public long moveNextStage(String userID, int habitID, String timeZone) {
+	public Habit completeDay(String userID, Long habitID, int today) {
+		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
+		habit.getDays()[today].setCompleted(true);
+		return repo.save(habit);
+	}
+
+	public long moveNextStage(String userID, Long habitID, String timeZone) {
 
 		ZoneId zoneId = ZoneId.of(timeZone);
 		ZonedDateTime now = ZonedDateTime.now(zoneId);
 		ZonedDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay(zoneId);
 
 		long timeTillMidnight = Duration.between(now, midnight).toMillis();
+		timeTillMidnight = 30000L;
 
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 		scheduler.schedule(() -> {
 			try {
 				Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
-				habit.setCurrDay(habit.getCurrDay() + 1);
-				repo.save(habit);
+				if (habit.getCurrDay() - 1 < 0 || habit.getDays()[habit.getCurrDay() - 1].isCompleted()) {
+					habit.setCurrDay(habit.getCurrDay() + 1);
+					repo.save(habit);
+				}
 			} finally {
 				scheduler.shutdown();
 			}
