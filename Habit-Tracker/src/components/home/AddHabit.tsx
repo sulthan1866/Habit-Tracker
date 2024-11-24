@@ -23,8 +23,8 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
     setErrorMessage(null);
     if (newHabit == "" || newHabitDays == 0) {
       setErrorMessage("Fill in the fields");
-    } else if (newHabitDays < 21 || newHabitDays > 400) {
-      setErrorMessage("please enter number of days between 21 and 400 days");
+    } else if (newHabitDays < 21 || newHabitDays > 250) {
+      setErrorMessage("please enter number of days between 21 and 250 days");
     } else if (newHabit.length > 25) {
       setErrorMessage("please keep habit name below 25 characters");
     } else
