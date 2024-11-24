@@ -44,8 +44,8 @@ public class LoginController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<HttpStatus> wakeUp() {
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<String> wakeUp() {
+		return new ResponseEntity<>("Hello world",HttpStatus.OK);
 	}
 
 }
