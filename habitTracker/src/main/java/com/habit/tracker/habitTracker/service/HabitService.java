@@ -65,7 +65,6 @@ public class HabitService {
 		ZonedDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay(zoneId);
 
 		long timeTillMidnight = Duration.between(now, midnight).toMillis();
-		timeTillMidnight = 30000L;
 
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
