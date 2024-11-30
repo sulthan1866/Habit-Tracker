@@ -1,32 +1,57 @@
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
   const [userID, setuserID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const token = searchParams.get("token");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [registering, setRegistering] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("loding...");
+
+  useEffect(() => {
+    const getEmail = async () => {
+      try {
+        const emailResult = await axios.get(
+          `${
+            import.meta.env.VITE_BASE_API_URL_V1
+          }/register/email?token=${token}`
+        );
+
+        if (emailResult.status == 200) {
+          setEmail(emailResult.data);
+        }
+      } catch {
+        setErrorMessage(null);
+        setErrorMessage("Invalid or expired link");
+        setEmail("Failed to fetch E-Mail");
+      }
+    };
+    getEmail();
+  }, [token]);
 
   const addUser = async () => {
+    setErrorMessage(null);
     if (userID === "" || password === "")
       setErrorMessage("Fill in the fields to register");
-    else
+    else if (password.length < 8) {
+      setErrorMessage("Password should contain atleast 8 character");
+    }else
       try {
         setRegistering(true);
         const result = await axios.post(
-          `${import.meta.env.VITE_BASE_API_URL_V1}/register`,
-          { userID: userID, password: password }
+          `${import.meta.env.VITE_BASE_API_URL_V1}/register?token=${token}`,
+          { userID, email, password }
         );
-
         if (result.status == 201) {
-          setErrorMessage(null);
           navigate("/login");
         }
       } catch {
-        setErrorMessage("User with this user id already exixts");
+        setErrorMessage("User with this user id or E-Mail already exixts");
       } finally {
         setRegistering(false);
       }
@@ -44,6 +69,18 @@ const Login = () => {
               </div>
             )}
             <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                E-Mail
+              </label>
+              <input
+                id="email"
+                type="text"
+                className="form-control"
+                value={email}
+                readOnly
+              />
+            </div>
+            <div className="mb-3">
               <label htmlFor="userID" className="form-label">
                 User ID
               </label>
@@ -54,6 +91,7 @@ const Login = () => {
                 className="form-control"
                 placeholder="Enter your User ID"
                 autoFocus
+                readOnly={registering}
                 required
               />
             </div>
@@ -67,6 +105,7 @@ const Login = () => {
                 type="password"
                 className="form-control"
                 placeholder="Enter your Password"
+                readOnly={registering}
                 required
               />
             </div>
@@ -83,4 +122,4 @@ const Login = () => {
     </div>
   );
 };
-export default Login;
+export default Register;

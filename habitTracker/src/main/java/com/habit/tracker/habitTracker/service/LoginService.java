@@ -12,25 +12,29 @@ import com.habit.tracker.habitTracker.repo.UserRepo;
 public class LoginService {
 
 	@Autowired
-	UserRepo userRepo ;
-	
+	UserRepo userRepo;
+
 	PasswordEncoder encoder = new BCryptPasswordEncoder(12);
-	
-	public boolean isUser(String userID, String password) {
-		Users user=userRepo.findByUserID(userID);
-		
-		 return user!=null && encoder.matches(password,user.getPassword());
-		
+
+	public String isUser(String userID, String email, String password) {
+		Users user = userRepo.findByUserIDOrEmail(userID, email);
+
+		if (user != null && encoder.matches(password, user.getPassword()))
+			return user.getUserID();
+		return "";
+
 	}
 
-	public boolean register(String userID, String password) {
-		
-		Users user=userRepo.findByUserID(userID);
-		if(user!=null)return false;
-		Users newUser = new Users(userID,encoder.encode(password));
+	public boolean register(String userID, String email, String password) {
+
+		Users user = userRepo.findByUserIDOrEmail(userID, email);
+		if (user != null) {
+			return false;
+		}
+		Users newUser = new Users(userID, email, encoder.encode(password));
 		userRepo.save(newUser);
 		return true;
-		
+
 	}
 
 }

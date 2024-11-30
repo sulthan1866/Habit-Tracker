@@ -11,7 +11,8 @@ interface Props {
 }
 
 const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [Message, setMessage] = useState<string | null>(null);
+  const [messStyle, setMessStyle] = useState<string>("");
   const [createdMessage, setCreatedMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const { userID } = useParams<{ userID: string }>();
@@ -20,13 +21,12 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
 
   const addHabit = async () => {
     setCreatedMessage(null);
-    setErrorMessage(null);
+    setMessage(null);
+    setMessStyle("danger");
     if (newHabit == "" || newHabitDays == 0) {
-      setErrorMessage("Fill in the fields");
+      setMessage("Fill in the fields");
     } else if (newHabitDays < 21 || newHabitDays > 250) {
-      setErrorMessage("please enter number of days between 21 and 250 days");
-    } else if (newHabit.length > 25) {
-      setErrorMessage("please keep habit name below 25 characters");
+      setMessage("please enter number of days between 21 and 250 days");
     } else
       try {
         setLoading(true);
@@ -36,7 +36,8 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
         );
 
         if (result.status == 201) {
-          setErrorMessage(null);
+          setMessage(null);
+          setMessStyle("success");
           setCreatedMessage(
             `Habit added successfully: ${newHabit} for ${newHabitDays} days`
           );
@@ -45,10 +46,17 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
         }
       } catch {
         setCreatedMessage(null);
-        setErrorMessage("Add habit failed");
+        setMessage("Add habit failed");
       } finally {
         setLoading(false);
       }
+  };
+
+  const close = () => {
+    setAdding(false);
+    setReload(!reload);
+    setNewHabit("");
+    setNewHabitDays(0);
   };
 
   return (
@@ -64,17 +72,17 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
               <div
                 style={{ cursor: "pointer" }}
                 className="d-flex justify-content-end btn-danger btn ms-auto"
-                onClick={() => {
-                  setAdding(false);
-                  setReload(!reload);
-                }}
+                onClick={close}
               >
                 X
               </div>
               <h3 className="text-center mb-4">Add Habit</h3>
-              {errorMessage && (
-                <div className="alert alert-danger text-center" role="alert">
-                  {errorMessage}
+              {Message && (
+                <div
+                  className={`alert alert-${messStyle} text-center`}
+                  role="alert"
+                >
+                  {Message}
                 </div>
               )}
               {createdMessage && (
@@ -90,6 +98,7 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
                   className="form-control"
                   placeholder="Enter your Habit"
                   autoFocus
+                  readOnly={loading}
                   required
                 />
               </div>
@@ -102,6 +111,7 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
                   type="number"
                   className="form-control"
                   placeholder="Enter number of days"
+                  readOnly={loading}
                   required
                 />
               </div>

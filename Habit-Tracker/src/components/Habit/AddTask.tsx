@@ -58,10 +58,10 @@ const AddTask = ({ tasks, setTasks, setChanges }: Props) => {
         className="container row"
       >
         <div className="w-50 col-6">
-          <h4>Add task</h4>
+          <h4>Add Task</h4>
           <input id="task" type="text" className="form-control" />
           <button onClick={() => addTask(null)} className="btn btn-info mt-3">
-            add
+            Add
           </button>
         </div>
         <div className="w-50 col-6">

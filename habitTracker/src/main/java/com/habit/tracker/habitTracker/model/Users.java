@@ -19,13 +19,16 @@ import lombok.NoArgsConstructor;
 public class Users {
 	@Id
 	private String userID;
+	@Column(unique = true)
+	private String email;
 	private String password;
 	@Convert(converter = BadgesConverter.class)
 	@Column(columnDefinition = "text")
 	private Map<String, Map<String, Integer>> badges;
 
-	public Users(String userID, String password) {
+	public Users(String userID, String email, String password) {
 		this.userID = userID;
+		this.email = email;
 		this.password = password;
 	}
 
