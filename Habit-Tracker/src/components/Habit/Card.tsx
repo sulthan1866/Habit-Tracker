@@ -42,6 +42,7 @@ function Card({
   const { userID } = useParams<{ userID: string }>();
   const { habitID } = useParams<{ habitID: string }>();
   const [message, setMessage] = useState<string | null>(null);
+  const [messStyle, setMessStyle] = useState<string>("");
   const [saving, setSaving] = useState<boolean>(false);
   const [hasChanges, setChanges] = useState<boolean>(false);
   const [isMovingNext, setMovingNext] = useState<boolean>(false);
@@ -63,14 +64,16 @@ function Card({
         `${
           import.meta.env.VITE_BASE_API_URL_V1
         }/${userID}/habits/${habitID}/${thisDay}`,
-        { tasks: tasks, date: date, note: note }
+        { tasks, date, note }
       );
       if (result.status == 202) {
+        setMessStyle("success");
         setMessage("Saved");
         setChanges(false);
         setReload(!reload);
       }
     } catch {
+      setMessStyle("danger");
       setMessage("Failed to save");
     } finally {
       setSaving(false);
@@ -84,6 +87,7 @@ function Card({
     if (!hasChanges) {
       setVisibility(false);
     } else if (!message) {
+      setMessStyle("info");
       setMessage("There are some un saved changes.");
       setTimeout(() => {
         setMessage(null);
@@ -107,6 +111,7 @@ function Card({
     );
 
     if (result.status == 200) {
+      setMessStyle("success");
       setMessage(
         "Todays tasks are completed ,schedule for tommorow. keep going!!!"
       );
@@ -119,6 +124,7 @@ function Card({
   };
   const moveNext = async () => {
     if (!completed && thisDay != 0) {
+      setMessStyle("success");
       setMessage("Complete today's tasks to save it");
       setTimeout(() => {
         setMessage(null);
@@ -126,6 +132,7 @@ function Card({
       return;
     }
     if (hasChanges) {
+      setMessStyle("warning");
       setMessage("There are some un saved changes.");
       setTimeout(() => {
         setMessage(null);
@@ -133,6 +140,7 @@ function Card({
       return;
     }
     if (tasks.length == 0) {
+      setMessStyle("danger");
       setMessage("Add tasks to save !");
       setTimeout(() => {
         setMessage(null);
@@ -148,12 +156,14 @@ function Card({
       { timeZone }
     );
     if (r.status == 200) {
+      setMessStyle("success");
       setMessage("Let's Goo!!!!");
       setInterval(() => {
         setMessage(null);
       }, 5000);
       setMovingNext(false);
     } else {
+      setMessStyle("danger");
       setMessage("Try again later");
       setInterval(() => {
         setMessage(null);
@@ -170,10 +180,12 @@ function Card({
       }/${userID}/habits/${habitID}/complete`
     );
     if (result.status == 200) {
+      setMessStyle("info");
       setMessage("Checkout new info ! on top right corner");
       setHabitCompleting(false);
       setReload(!reload);
     } else {
+      setMessStyle("danger");
       setMessage("process failed");
       setHabitCompleting(false);
     }
@@ -197,7 +209,10 @@ function Card({
             <div style={flipStyle} className="flip-card-inner">
               <div className="card flip-card-front">
                 {message && (
-                  <div className="alert alert-info text-center" role="alert">
+                  <div
+                    className={`alert alert-${messStyle} text-center`}
+                    role="alert"
+                  >
                     {message}
                   </div>
                 )}
@@ -294,7 +309,10 @@ function Card({
               </div>
               <div className="container flip-card-back card">
                 {message && (
-                  <div className="alert alert-info text-center" role="alert">
+                  <div
+                    className={`alert alert-${messStyle} text-center`}
+                    role="alert"
+                  >
                     {message}
                   </div>
                 )}

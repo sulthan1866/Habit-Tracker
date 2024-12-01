@@ -27,7 +27,7 @@ public class Habit {
 	private int currDay;
 
 	@Convert(converter = DaysConverter.class)
-	@Column(columnDefinition = "text")
+	@Column(columnDefinition = "TEXT")
 	private Day[] days;
 
 	public Habit(String userID, String name, int numberOfDays) {

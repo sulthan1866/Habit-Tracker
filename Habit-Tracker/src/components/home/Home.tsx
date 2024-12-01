@@ -9,6 +9,7 @@ import "./badge.css";
 
 interface Users {
   userID: string | undefined;
+  email: string;
   badges: Badge[];
 }
 
@@ -17,18 +18,10 @@ interface Badge {
   nameDayMap: [name: string, numOfDays: number][];
 }
 
-interface Day {
-  tasks: string[];
-  note: string;
-  date: Date;
-}
-
 interface Habit {
   habitID: number;
-  userID: string;
   name: string;
   numberOfDays: number;
-  days: Day;
   currDay: number;
 }
 
@@ -37,6 +30,7 @@ const Home = () => {
   const [reload, setReload] = useState(false);
   const [userdata, setUserData] = useState<Users>({
     userID: "",
+    email: "",
     badges: [],
   });
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -120,7 +114,11 @@ const Home = () => {
           }
         })
         .then((data) => {
-          setUserData({ userID: userID, badges: transformBadges(data.badges) });
+          setUserData({
+            userID: userID,
+            email: data.email,
+            badges: transformBadges(data.badges),
+          });
         })
         .catch(() => {
           setLoading(false);
@@ -208,7 +206,12 @@ const Home = () => {
               >
                 <div>
                   <Link to={habit.habitID.toString()}>
-                    <button className="btn btn-light">{habit.name} </button>
+                    <input
+                      type="text"
+                      readOnly
+                      value={habit.name}
+                      className="btn btn-light mx-1"
+                    />
                   </Link>
                   <p>{`Progress = ${habit.currDay - 1}/${
                     habit.numberOfDays

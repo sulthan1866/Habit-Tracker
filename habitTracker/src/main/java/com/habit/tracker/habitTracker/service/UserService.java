@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.habit.tracker.habitTracker.model.Habit;
@@ -20,8 +22,20 @@ public class UserService {
 	@Autowired
 	HabitsRepo habitsRepo;
 
+	PasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
 	public Users getUserByID(String userID) {
 		return userRepo.findByUserID(userID);
+	}
+
+	public Users getUserByEmail(String email) {
+		return userRepo.findByEmail(email);
+	}
+
+	public void setNewPassword(Users user) {
+		Users users = userRepo.findByEmail(user.getEmail());
+		users.setPassword(encoder.encode(user.getPassword()));
+		userRepo.save(users);
 	}
 
 	public Users addBadge(String userID, Long habitID) {

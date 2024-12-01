@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./../../home.css";
+import "./menu.css";
 interface Props {
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
