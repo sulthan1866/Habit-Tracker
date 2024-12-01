@@ -35,7 +35,7 @@ public class LoginController {
 	@Autowired
 	EMailService eMailService;
 
-	@Value("{FRONT_END}")
+	@Value("${FRONT_END}")
 	private String frontEndLink;
 
 	@PostMapping("/login")
