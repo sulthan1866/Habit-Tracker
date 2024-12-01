@@ -75,11 +75,11 @@ public class LoginController {
 
 	@PostMapping("/send-register")
 	public ResponseEntity<HttpStatus> sendRegistration(@RequestBody Users user) {
-		if (tokenService.hasAlreadySentEmail(user.getEmail())) {
-			return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
-		}
 		if (userService.getUserByEmail(user.getEmail()) != null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		if (tokenService.hasAlreadySentEmail(user.getEmail())) {
+			return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
 		}
 		String token = tokenService.createToken(user.getEmail());
 		String registrationLink = frontEndLink + "/register?token=" + token;
