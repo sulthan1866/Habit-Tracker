@@ -57,12 +57,7 @@ const EmailChanged = () => {
       {message && (
         <div className="alert alert-success text-center">{message}</div>
       )}
-      <input
-        type="text"
-        className="form-control"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <input type="text" className="form-control" value={email} readOnly />
       <div className="d-flex justify-content-center m-5">
         <button
           disabled={verifing}
