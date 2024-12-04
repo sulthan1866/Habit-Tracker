@@ -23,6 +23,9 @@ interface Habit {
   numberOfDays: number;
   days: Day[];
   currDay: number;
+
+  streak: number;
+  maxStreak: number;
 }
 
 const Habit = () => {
@@ -33,6 +36,8 @@ const Habit = () => {
     numberOfDays: 0,
     days: [],
     currDay: -1,
+    streak: -1,
+    maxStreak: -1,
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -208,10 +213,16 @@ const Habit = () => {
         </div>
       )}
       <div className="row">
-        <div className="col-8"></div>
+        <div className="col-1"></div>
+        <div className="col-6 d-flex justify-content-start m-auto mt-3">
+          <h6>{`current streak: ${habit.streak}`}</h6>
+          <div className="col-1"></div>
+          <h6>{`max streak: ${habit.maxStreak}`}</h6>
+        </div>
         <div className="col-1 d-flex justify-content-end m-auto mt-3">
           <Instructions title={habit.name}>{instruction}</Instructions>
         </div>
+
         {habit.currDay >= habit.numberOfDays + 1 && (
           <div className="col-1 d-flex justify-content-end m-auto mt-3">
             <Instructions title={`${habit.name} - Completed 🎉`}>

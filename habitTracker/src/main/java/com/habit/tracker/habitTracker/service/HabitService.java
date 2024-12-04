@@ -73,6 +73,14 @@ public class HabitService {
 				Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
 				if (habit.getCurrDay() - 1 < 0 || habit.getDays()[habit.getCurrDay() - 1].isCompleted()) {
 					habit.setCurrDay(habit.getCurrDay() + 1);
+					if (habit.getCurrDay() - 1 < 0 || habit.getDays()[habit.getCurrDay() - 1].getDate().toLocalDate()
+							.plusDays(1).equals(habit.getDays()[habit.getCurrDay()].getDate().toLocalDate())) {
+						habit.setStreak(habit.getStreak() + 1);
+						int maxStreak = Math.max(habit.getMaxStreak(), habit.getStreak());
+						habit.setMaxStreak(maxStreak);
+					} else {
+						habit.setStreak(0);
+					}
 					repo.save(habit);
 				}
 			} finally {

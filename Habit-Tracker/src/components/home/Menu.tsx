@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import "./menu.css";
+import { ReactNode } from "react";
 interface Props {
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   heading: string | undefined;
-  options: string[];
+  options: ReactNode[];
   onClicks: (() => void)[];
 }
 
@@ -37,7 +38,7 @@ const Menu = ({ menuOpen, setMenuOpen, heading, options, onClicks }: Props) => {
         style={{ width: "250px", transition: "transform 0.3s ease" }}
       >
         <div className="p-3 text-center">
-          <h2>{heading}</h2>
+          <h2>{heading?.substring(0, 12)}</h2>
           <hr></hr>
           {options.map((option, i) => (
             <p key={i} onClick={onClicks[i]} style={{ cursor: "pointer" }}>

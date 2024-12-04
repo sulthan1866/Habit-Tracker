@@ -4,18 +4,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Menu from "./Menu";
 import AddHabit from "./AddHabit";
 import Instructions from "./Instructions";
-import { Badge } from "react-bootstrap";
 import "./badge.css";
 
 interface Users {
   userID: string | undefined;
   email: string;
-  badges: Badge[];
-}
-
-interface Badge {
-  name: string;
-  nameDayMap: [name: string, numOfDays: number][];
 }
 
 interface Habit {
@@ -31,19 +24,13 @@ const Home = () => {
   const [userdata, setUserData] = useState<Users>({
     userID: "",
     email: "",
-    badges: [],
   });
   const [habits, setHabits] = useState<Habit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAdding, setAdding] = useState<boolean>(false);
-  const badgeMap = new Map([
-    ["gold", "🏅"],
-    ["silver", "🥈"],
-    ["bronze", "🥉"],
-    ["novice", "🔰"],
-  ]);
+
   const instruction = (
     <>
       <h5>🌟 Adding a New Habit</h5>
@@ -81,15 +68,6 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  const transformBadges = (
-    badgesData: Record<string, Record<string, number>>
-  ): Badge[] => {
-    return Object.entries(badgesData).map(([key, value]) => ({
-      name: key,
-      nameDayMap: Object.entries(value) as [string, number][],
-    }));
-  };
-
   useEffect(() => {
     try {
       const habit_tracker_userID_token = sessionStorage.getItem(
@@ -117,7 +95,6 @@ const Home = () => {
           setUserData({
             userID: userID,
             email: data.email,
-            badges: transformBadges(data.badges),
           });
         })
         .catch(() => {
@@ -150,8 +127,6 @@ const Home = () => {
 
   const addHabit = () => {
     setAdding(true);
-    console.log(userdata.badges.length);
-    console.log(userdata.badges);
   };
 
   if (loading) return <h1>LOADING</h1>;
@@ -170,8 +145,12 @@ const Home = () => {
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
           heading={userdata?.userID}
-          options={[]}
-          onClicks={[]}
+          options={["profile"]}
+          onClicks={[
+            () => {
+              navigate("profile");
+            },
+          ]}
         ></Menu>
         {/* Main Content */}
         <div
@@ -225,39 +204,6 @@ const Home = () => {
                 Add Habit
               </button>
             </div>
-          </div>
-        </div>
-        <div
-          className={` ms-auto`}
-          style={{
-            padding: "20px",
-          }}
-        >
-          <div className="mt-5">
-            {userdata?.badges.length > 0 ? (
-              userdata.badges.map((badge, i) => (
-                <div key={i}>
-                  <h5>{`${badge.name} badges`}</h5>
-                  {badge.nameDayMap.map((nameDay, i) => (
-                    <>
-                      <span
-                        key={i}
-                        className={`badge badge-${badge.name} position-relative d-inline-block`}
-                        tabIndex={0}
-                      >
-                        {badgeMap.get(badge.name)}
-                        <div className="badge-info">
-                          {`${nameDay[0]} for ${nameDay[1]} days`}
-                        </div>
-                      </span>
-                    </>
-                  ))}
-                  <hr />
-                </div>
-              ))
-            ) : (
-              <h5>No badges yet</h5>
-            )}
           </div>
         </div>
       </div>

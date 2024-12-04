@@ -40,7 +40,9 @@ const Register = () => {
       setErrorMessage("Fill in the fields to register");
     else if (password.length < 8) {
       setErrorMessage("Password should contain atleast 8 character");
-    }else
+    } else if (userID.length > 30) {
+      setErrorMessage("Maximum length of userID exceeded");
+    } else
       try {
         setRegistering(true);
         const result = await axios.post(
@@ -114,7 +116,7 @@ const Register = () => {
               onClick={addUser}
               className="btn btn-primary w-100 mb-2"
             >
-              {registering ? "Creating your Account" : "Create New Account"}
+              {registering ? "Creating your Account..." : "Create New Account"}
             </button>
           </div>
         </div>
