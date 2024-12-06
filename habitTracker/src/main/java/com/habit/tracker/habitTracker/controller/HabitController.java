@@ -55,6 +55,14 @@ public class HabitController {
 
 	}
 
+	@PutMapping("/habits/{habitID}")
+	public ResponseEntity<Habit> editName(@PathVariable String userID, @PathVariable Long habitID,
+			@RequestBody Habit newNameHabit) {
+		Habit habit = habitService.editHabitName(userID, habitID, newNameHabit.getName());
+		return new ResponseEntity<>(habit, HttpStatus.ACCEPTED);
+
+	}
+
 	@PutMapping("/habits/{habitID}/{thisDay}")
 	public ResponseEntity<Habit> updateHabit(@PathVariable String userID, @PathVariable Long habitID,
 			@PathVariable int thisDay, @RequestBody Day day) {

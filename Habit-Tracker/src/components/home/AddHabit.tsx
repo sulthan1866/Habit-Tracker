@@ -13,43 +13,48 @@ interface Props {
 const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
   const [Message, setMessage] = useState<string | null>(null);
   const [messStyle, setMessStyle] = useState<string>("");
-  const [createdMessage, setCreatedMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const { userID } = useParams<{ userID: string }>();
   const [newHabit, setNewHabit] = useState<string>("");
   const [newHabitDays, setNewHabitDays] = useState<number>(0);
 
   const addHabit = async () => {
-    setCreatedMessage(null);
     setMessage(null);
     setMessStyle("danger");
     if (newHabit == "" || newHabitDays == 0) {
       setMessage("Fill in the fields");
-    } else if (newHabitDays < 21 || newHabitDays > 250) {
+      return;
+    }
+    if (newHabitDays < 21 || newHabitDays > 250) {
       setMessage("please enter number of days between 21 and 250 days");
-    } else
-      try {
-        setLoading(true);
-        const result = await axios.post(
-          `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/habits`,
-          { name: newHabit, numberOfDays: newHabitDays }
-        );
+      return;
+    }
+    if (newHabit.length > 250) {
+      setMessage("Max length exceeded");
+      return;
+    }
+    try {
+      setLoading(true);
+      const result = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/habits`,
+        { name: newHabit, numberOfDays: newHabitDays }
+      );
 
-        if (result.status == 201) {
-          setMessage(null);
-          setMessStyle("success");
-          setCreatedMessage(
-            `Habit added successfully: ${newHabit} for ${newHabitDays} days`
-          );
-          setNewHabit(result.data.name);
-          setNewHabitDays(result.data.numberOfDays);
-        }
-      } catch {
-        setCreatedMessage(null);
-        setMessage("Add habit failed");
-      } finally {
-        setLoading(false);
+      if (result.status == 201) {
+        setMessage(null);
+        setMessStyle("success");
+        setMessage(
+          `Habit added successfully: ${newHabit} for ${newHabitDays} days`
+        );
+        setNewHabit(result.data.name);
+        setNewHabitDays(result.data.numberOfDays);
       }
+    } catch {
+      setMessage(null);
+      setMessage("Add habit failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const close = () => {
@@ -85,11 +90,7 @@ const AddHabit = ({ reload, setReload, setAdding, isAdding }: Props) => {
                   {Message}
                 </div>
               )}
-              {createdMessage && (
-                <div className="alert alert-success text-center" role="alert">
-                  {createdMessage}
-                </div>
-              )}
+
               <div className="mb-3">
                 <label className="form-label">New Habit</label>
                 <input

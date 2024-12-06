@@ -38,6 +38,12 @@ public class UserService {
 		userRepo.save(users);
 	}
 
+	public void setNewEmail(Users user) {
+		Users users = userRepo.findByUserID(user.getUserID());
+		users.setEmail(user.getEmail());
+		userRepo.save(users);
+	}
+
 	public Users addBadge(String userID, Long habitID) {
 		Users user = userRepo.findByUserID(userID);
 		Habit habit = habitsRepo.findByUserIDAndHabitID(userID, habitID);

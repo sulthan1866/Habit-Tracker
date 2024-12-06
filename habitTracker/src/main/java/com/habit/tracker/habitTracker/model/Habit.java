@@ -25,6 +25,8 @@ public class Habit {
 	private String name;
 	private int numberOfDays;
 	private int currDay;
+	private int streak;
+	private int maxStreak;
 
 	@Convert(converter = DaysConverter.class)
 	@Column(columnDefinition = "TEXT")
