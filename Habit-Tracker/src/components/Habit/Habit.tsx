@@ -5,6 +5,7 @@ import Menu from "./../home/Menu";
 import Stage from "./Stage";
 import Card from "./Card";
 import Instructions from "../home/Instructions";
+import HabitName from "./HabitName";
 
 interface Users {
   userID: string;
@@ -52,6 +53,7 @@ const Habit = () => {
   const [completed, setCompleted] = useState<boolean>(false);
   const [thisDay, setThisDay] = useState<number>(-1);
   const [isCardVisibile, setCardVisibility] = useState<boolean>(false);
+  const [isHabitNameEditing, setHabitNameEditing] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -214,10 +216,14 @@ const Habit = () => {
       )}
       <div className="row">
         <div className="col-1"></div>
-        <div className="col-6 d-flex justify-content-start m-auto mt-3">
-          <h6>{`current streak: ${habit.streak}`}</h6>
-          <div className="col-1"></div>
-          <h6>{`max streak: ${habit.maxStreak}`}</h6>
+        <div className="p-auto col">
+          <HabitName
+            Habitname={habit.name}
+            isEditing={isHabitNameEditing}
+            setEditing={setHabitNameEditing}
+            reload={reload}
+            setReload={setReload}
+          />
         </div>
         <div className="col-1 d-flex justify-content-end m-auto mt-3">
           <Instructions title={habit.name}>{instruction}</Instructions>
@@ -231,21 +237,33 @@ const Habit = () => {
           </div>
         )}
       </div>
+      <div className="row">
+        <div className="col-1"></div>
+        <div className="col-6 d-flex justify-content-start mt-3">
+          <h6>{`current streak: ${habit.streak}`}</h6>
+          <div className="col-1"></div>
+          <h6>{`max streak: ${habit.maxStreak}`}</h6>
+        </div>
+      </div>
       <div
         style={{ display: isCardVisibile ? "block" : "none" }}
         className="d-flex vh-100 position-relative"
       >
-        {/* Sidebar */}
+        {/* Menu */}
         <div className="row">
           <div className="col">
             <Menu
               menuOpen={menuOpen}
               setMenuOpen={setMenuOpen}
               heading={userdata?.userID}
-              options={["Home", "Delete Habit"]}
+              options={["Home", "Edit Name", "Delete Habit"]}
               onClicks={[
                 () => {
                   navigate(`/${userID}`);
+                },
+                () => {
+                  setHabitNameEditing(true);
+                  setMenuOpen(false);
                 },
                 deleteHabit,
               ]}

@@ -42,6 +42,12 @@ public class HabitService {
 		return null;
 	}
 
+	public Habit editHabitName(String userID, Long habitID, String newName) {
+		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
+		habit.setName(newName);
+		return repo.save(habit);
+	}
+
 	public Habit updateHabit(String userID, Long habitID, int thisDay, Day day) {
 		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
 		habit.setDay(day, thisDay);
@@ -73,8 +79,8 @@ public class HabitService {
 				Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
 				if (habit.getCurrDay() - 1 < 0 || habit.getDays()[habit.getCurrDay() - 1].isCompleted()) {
 					habit.setCurrDay(habit.getCurrDay() + 1);
-					if (habit.getCurrDay() - 1 < 0 || habit.getDays()[habit.getCurrDay() - 1].getDate().toLocalDate()
-							.plusDays(1).equals(habit.getDays()[habit.getCurrDay()].getDate().toLocalDate())) {
+					if (habit.getCurrDay() - 2 < 0 || habit.getDays()[habit.getCurrDay() - 2].getDate().toLocalDate()
+							.plusDays(1).isEqual(habit.getDays()[habit.getCurrDay() - 1].getDate().toLocalDate())) {
 						habit.setStreak(habit.getStreak() + 1);
 						int maxStreak = Math.max(habit.getMaxStreak(), habit.getStreak());
 						habit.setMaxStreak(maxStreak);

@@ -48,15 +48,6 @@ public class LoginController {
 
 	}
 
-	@GetMapping("/register/email")
-	public ResponseEntity<String> getEmail(@RequestParam String token) {
-		if (!tokenService.isValidToken(token))
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		String email = tokenService.getMailByToken(token);
-
-		return new ResponseEntity<>(email, HttpStatus.OK);
-	}
-
 	@PostMapping("/register")
 	public ResponseEntity<HttpStatus> register(@RequestBody Users user, @RequestParam String token) {
 
@@ -73,25 +64,6 @@ public class LoginController {
 
 	}
 
-	@PostMapping("/send-register")
-	public ResponseEntity<HttpStatus> sendRegistration(@RequestBody Users user) {
-		if (userService.getUserByEmail(user.getEmail()) != null) {
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-		}
-		if (tokenService.hasAlreadySentEmail(user.getEmail())) {
-			return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
-		}
-		String token = tokenService.createToken(user.getEmail());
-		String registrationLink = frontEndLink + "/register?token=" + token;
-		eMailService.sendMail(user.getEmail(), "Complete Your Registration - Habit Tracker App",
-				"To register for the Habit Tracker app, please click the link below:\n"
-						+ registrationLink + " (Only valid for 30 minutes)\n\n"
-						+ "If you did not request to register for our app, please disregard this email.");
-
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
-
-	}
-
 	@PostMapping("/forgot-password")
 	public ResponseEntity<HttpStatus> changePassword(@RequestBody Users user, @RequestParam String token) {
 		if (!tokenService.isValidToken(token)) {
@@ -102,25 +74,6 @@ public class LoginController {
 		}
 		userService.setNewPassword(user);
 		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	@PostMapping("/send-password")
-	public ResponseEntity<HttpStatus> sendPasswordChange(@RequestBody Users user) {
-		// if (tokenService.hasAlreadySentEmail(user.getEmail())) {
-		// return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
-		// }
-		if (userService.getUserByEmail(user.getEmail()) == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-		}
-		String token = tokenService.createToken(user.getEmail());
-		String registrationLink = frontEndLink + "/reset-password?token=" + token;
-		eMailService.sendMail(user.getEmail(), "Reset Your Password - Habit Tracker App",
-				"To reset your password for the Habit Tracker app, please click the link below:\n"
-						+ registrationLink + " (Only valid for 30 minutes)\n\n"
-						+ "If you did not request to change password in our app, please disregard this email.");
-
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
-
 	}
 
 	@GetMapping("/")

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,8 +23,8 @@ import com.habit.tracker.habitTracker.service.UserService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1/{userID}")
-public class EditController {
+@RequestMapping("/api/v1")
+public class EmailController {
 
     @Value("${FRONT_END}")
     private String frontEndLink;
@@ -37,7 +38,54 @@ public class EditController {
     @Autowired
     TokenService tokenService;
 
-    @PostMapping("/send-reset-email")
+    @GetMapping("/register/email")
+    public ResponseEntity<String> getEmail(@RequestParam String token) {
+        if (!tokenService.isValidToken(token))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        String email = tokenService.getMailByToken(token);
+
+        return new ResponseEntity<>(email, HttpStatus.OK);
+    }
+
+    @PostMapping("/send-register")
+    public ResponseEntity<HttpStatus> sendRegistration(@RequestBody Users user) {
+        if (userService.getUserByEmail(user.getEmail()) != null) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        if (tokenService.hasAlreadySentEmail(user.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
+        }
+        String token = tokenService.createToken(user.getEmail());
+        String registrationLink = frontEndLink + "/register?token=" + token;
+        emailService.sendMail(user.getEmail(), "Complete Your Registration - Habit Tracker App",
+                "To register for the Habit Tracker app, please click the link below:\n"
+                        + registrationLink + " (Only valid for 30 minutes)\n\n"
+                        + "If you did not request to register for our app, please disregard this email.");
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+    }
+
+    @PostMapping("/send-password")
+    public ResponseEntity<HttpStatus> sendPasswordChange(@RequestBody Users user) {
+        // if (tokenService.hasAlreadySentEmail(user.getEmail())) {
+        // return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
+        // }
+        if (userService.getUserByEmail(user.getEmail()) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        String token = tokenService.createToken(user.getEmail());
+        String registrationLink = frontEndLink + "/reset-password?token=" + token;
+        emailService.sendMail(user.getEmail(), "Reset Your Password - Habit Tracker App",
+                "To reset your password for the Habit Tracker app, please click the link below:\n"
+                        + registrationLink + " (Only valid for 30 minutes)\n\n"
+                        + "If you did not request to change password in our app, please disregard this email.");
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+    }
+
+    @PostMapping("/{userID}/send-reset-email")
     public ResponseEntity<HttpStatus> sendResetEmail(@PathVariable String userID,
             @RequestBody Map<String, String> newEmail) {
         if (userService.getUserByEmail(newEmail.get("newEmail")) != null) {
@@ -56,7 +104,7 @@ public class EditController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/reset-email")
+    @PutMapping("/{userID}/reset-email")
     public ResponseEntity<HttpStatus> resetEmail(@RequestBody Users user, @RequestParam String token) {
 
         if (!tokenService.isValidToken(token))
@@ -64,4 +112,5 @@ public class EditController {
         userService.setNewEmail(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
