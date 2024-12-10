@@ -22,7 +22,7 @@ import com.habit.tracker.habitTracker.service.TokenService;
 import com.habit.tracker.habitTracker.service.UserService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "${FRONT_END}")
 @RequestMapping("/api/v1")
 public class EmailController {
 

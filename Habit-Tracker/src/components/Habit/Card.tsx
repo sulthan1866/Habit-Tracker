@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 interface Props {
   reload: boolean;
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
+  id: number;
   tasks: string[];
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
   note: string | undefined;
@@ -25,6 +26,7 @@ interface Props {
 function Card({
   reload,
   setReload,
+  id,
   tasks,
   setTasks,
   note,
@@ -64,13 +66,13 @@ function Card({
         `${
           import.meta.env.VITE_BASE_API_URL_V1
         }/${userID}/habits/${habitID}/${thisDay}`,
-        { tasks, date, note }
+        { id, tasks, date, note }
       );
       if (result.status == 202) {
         setMessStyle("success");
         setMessage("Saved");
         setChanges(false);
-        setReload(!reload);
+        if (id == 0) setReload(!reload);
       }
     } catch {
       setMessStyle("danger");
@@ -125,7 +127,9 @@ function Card({
   const moveNext = async () => {
     if (!completed && thisDay != 0) {
       setMessStyle("success");
-      setMessage("Complete today's tasks to save it");
+      setMessage(
+        "Complete today's tasks to schedule it, you can still save it now !"
+      );
       setTimeout(() => {
         setMessage(null);
       }, 5000);

@@ -1,24 +1,37 @@
 package com.habit.tracker.habitTracker.model;
 
-import java.io.Serializable;
 import java.sql.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Day implements Serializable {
+@Entity
+@Table(name = "days")
+public class Day {
 
-	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Long habitID;
+	private int today;
 	private String[] tasks;
+	@Column(columnDefinition = "TEXT")
 	private String note;
 	private Date date;
 	private boolean isCompleted;
 
+	public Day(Long habitID, Date date) {
+		this.habitID = habitID;
+		this.date = date;
+	}
 }
