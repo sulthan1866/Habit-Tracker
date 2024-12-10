@@ -12,6 +12,7 @@ interface Users {
 }
 
 interface Day {
+  id: number;
   tasks: string[];
   note: string;
   date: Date;
@@ -47,6 +48,7 @@ const Habit = () => {
   const { habitID } = useParams<{ habitID: string }>();
   const [reload, setReload] = useState(false);
   const { userID } = useParams<{ userID: string }>();
+  const [DayID, setDayID] = useState<number>(0);
   const [tasks, setTasks] = useState<string[]>([]);
   const [note, setNote] = useState<string>();
   const [date, setDate] = useState<Date>(new Date());
@@ -187,7 +189,7 @@ const Habit = () => {
   const onStageSelect = (day: number) => {
     setCardVisibility(true);
     setThisDay(day);
-
+    setDayID(habit.days[day] ? habit.days[day].id : 0);
     setTasks(habit?.days[day] ? habit?.days[day].tasks : []);
     setNote(habit?.days[day] ? habit?.days[day].note : "");
     setCompleted(
@@ -204,6 +206,9 @@ const Habit = () => {
     }
   };
 
+  useEffect(() => {
+    setDayID(habit.days[thisDay] ? habit.days[thisDay].id : 0);
+  }, [thisDay, habit.days]);
   if (loading) return <h1>LOADING</h1>;
   if (error) return <h1>ERROR</h1>;
 
@@ -283,6 +288,7 @@ const Habit = () => {
             <Card
               reload={reload}
               setReload={setReload}
+              id={DayID}
               tasks={tasks}
               setTasks={setTasks}
               note={note}

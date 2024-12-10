@@ -21,14 +21,15 @@ const Profile = () => {
     email: "",
     badges: [],
   });
-  const [newUserID, setNewUserID] = useState<string>("");
   const [newEmail, setNewEmail] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
   const [Message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [sendingMail, setSendingMail] = useState<boolean>(false);
   const [isEditing, setEditing] = useState<boolean>(false);
+  const [isPassEditing, setPassEditing] = useState<boolean>(false);
   const badgeMap = new Map([
     ["gold", "🏅"],
     ["silver", "🥈"],
@@ -73,7 +74,6 @@ const Profile = () => {
             email: data.email,
             badges: transformBadges(data.badges),
           });
-          setNewUserID(userID);
           setNewEmail(data.email);
         })
         .catch(() => {
@@ -107,6 +107,22 @@ const Profile = () => {
     }
   };
 
+  const changePassword = async () => {
+    setMessage(null);
+    if (newPassword.length < 8) {
+      setMessage("Password should contain atleast 8 character");
+      return;
+    }
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/change-password`,
+        { email: newEmail, password: newPassword }
+      );
+    } catch {
+      setMessage("Process failed");
+    }
+  };
+
   if (loading) return <h1>Loading</h1>;
   if (error) return <h1>Error</h1>;
   return (
@@ -129,30 +145,7 @@ const Profile = () => {
         <div className="row">
           <div className="col-lg-5 col-11 m-3">
             <div className="row m-2">
-              <label htmlFor="userid">
-                User ID
-                <input
-                  className="form-control "
-                  type="text"
-                  value={newUserID}
-                  onChange={(e) => setNewUserID(e.target.value)}
-                  readOnly
-                />
-                {/* <div className="justify-content-end d-flex">
-                  {isEditing ? (
-                    <button className="btn btn-success" onClick={saveChanges}>
-                      save?
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-success"
-                      onClick={() => setEditing(true)}
-                    >
-                      edit
-                    </button>
-                  )}
-                </div> */}
-              </label>
+              <label htmlFor="userid">User ID : {userID}</label>
             </div>
             <div className="row m-2">
               <label htmlFor="email">
@@ -176,6 +169,42 @@ const Profile = () => {
                 >
                   {isEditing ? "verify E-Mail?" : "edit E-Mail"}
                 </button>
+              </label>
+            </div>
+            <div className="row m-2">
+              <label htmlFor="password">
+                Change Password :
+                {isPassEditing ? (
+                  <input
+                    className="form-control "
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    readOnly={!isPassEditing}
+                  />
+                ) : (
+                  <button
+                    className="btn btn-success"
+                    disabled={sendingMail}
+                    onClick={() => {
+                      setPassEditing(!isPassEditing);
+                    }}
+                  >
+                    {"change password"}
+                  </button>
+                )}
+                {isPassEditing && (
+                  <button
+                    className="btn btn-success"
+                    disabled={sendingMail}
+                    onClick={() => {
+                      setPassEditing(!isPassEditing);
+                      changePassword();
+                    }}
+                  >
+                    {"confirm password"}
+                  </button>
+                )}
               </label>
             </div>
           </div>

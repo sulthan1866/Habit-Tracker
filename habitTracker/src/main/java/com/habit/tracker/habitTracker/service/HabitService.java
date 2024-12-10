@@ -8,7 +8,6 @@ import com.habit.tracker.habitTracker.model.Habit;
 import com.habit.tracker.habitTracker.repo.HabitsRepo;
 
 import java.util.List;
-
 import java.time.*;
 import java.util.concurrent.*;
 
@@ -60,7 +59,7 @@ public class HabitService {
 
 	public Habit completeDay(String userID, Long habitID, int today) {
 		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
-		habit.getDays()[today].setCompleted(true);
+		habit.getDays().get(today).setCompleted(true);
 		return repo.save(habit);
 	}
 
@@ -77,10 +76,11 @@ public class HabitService {
 		scheduler.schedule(() -> {
 			try {
 				Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
-				if (habit.getCurrDay() - 1 < 0 || habit.getDays()[habit.getCurrDay() - 1].isCompleted()) {
+				if (habit.getCurrDay() - 1 < 0 || habit.getDays().get(habit.getCurrDay() - 1).isCompleted()) {
 					habit.setCurrDay(habit.getCurrDay() + 1);
-					if (habit.getCurrDay() - 2 < 0 || habit.getDays()[habit.getCurrDay() - 2].getDate().toLocalDate()
-							.plusDays(1).isEqual(habit.getDays()[habit.getCurrDay() - 1].getDate().toLocalDate())) {
+					if (habit.getCurrDay() - 2 < 0 || habit.getDays().get(habit.getCurrDay() - 2).getDate()
+							.toLocalDate()
+							.plusDays(1).isEqual(habit.getDays().get(habit.getCurrDay() - 1).getDate().toLocalDate())) {
 						habit.setStreak(habit.getStreak() + 1);
 						int maxStreak = Math.max(habit.getMaxStreak(), habit.getStreak());
 						habit.setMaxStreak(maxStreak);

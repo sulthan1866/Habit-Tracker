@@ -14,7 +14,7 @@ import com.habit.tracker.habitTracker.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/{userID}")
-@CrossOrigin
+@CrossOrigin(origins = "${FRONT_END}")
 public class UserController {
 
     @Autowired

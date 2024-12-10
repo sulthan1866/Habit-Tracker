@@ -23,7 +23,7 @@ import com.habit.tracker.habitTracker.service.HabitService;
 
 @RestController
 @RequestMapping("/api/v1/{userID}")
-@CrossOrigin
+@CrossOrigin(origins = "${FRONT_END}")
 public class HabitController {
 
 	@Autowired
@@ -87,7 +87,7 @@ public class HabitController {
 	public ResponseEntity<HttpStatus> completeDay(@PathVariable String userID, @PathVariable Long habitID,
 			@PathVariable int thisDay) {
 		Habit habit = habitService.completeDay(userID, habitID, thisDay);
-		if (habit.getDays()[thisDay].isCompleted())
+		if (habit.getDays().get(thisDay).isCompleted())
 			return new ResponseEntity<>(HttpStatus.OK);
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 
