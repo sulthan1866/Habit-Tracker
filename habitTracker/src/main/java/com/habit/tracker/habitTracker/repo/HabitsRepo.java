@@ -168,7 +168,7 @@ public class HabitsRepo implements IHabitsRepo {
     public List<Habit> findByUserID(String userID) {
         List<Habit> habits = habitsRepo.findByUserID(userID);
         for (Habit habit : habits) {
-            habit.setDays(dayRepo.findByHabitID(habit.getHabitID()));
+            habit.setDays(dayRepo.findByHabitIDOrderByIdAsc(habit.getHabitID()));
         }
         return habits;
     }
@@ -176,7 +176,7 @@ public class HabitsRepo implements IHabitsRepo {
     @Override
     public Habit findByUserIDAndHabitID(String userID, Long habitID) {
         Habit habit = habitsRepo.findByUserIDAndHabitID(userID, habitID);
-        habit.setDays(dayRepo.findByHabitID(habit.getHabitID()));
+        habit.setDays(dayRepo.findByHabitIDOrderByIdAsc(habit.getHabitID()));
         return habit;
     }
 
