@@ -37,9 +37,9 @@ public class HabitController {
 		return new ResponseEntity<>(habits, HttpStatus.OK);
 	}
 
-	@GetMapping("/habits/{habitID}")
-	public ResponseEntity<Habit> getHabit(@PathVariable String userID, @PathVariable Long habitID) {
-		Habit habit = habitService.getHabitByUserIDAndHabitID(userID, habitID);
+	@GetMapping("/habits/{habitID}/{today}")
+	public ResponseEntity<Habit> getHabit(@PathVariable Long habitID, @PathVariable int today) {
+		Habit habit = habitService.getHabitWithRangeDaysByHabitID(habitID, today);
 		if (habit == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(habit, HttpStatus.OK);
@@ -56,19 +56,18 @@ public class HabitController {
 	}
 
 	@PutMapping("/habits/{habitID}")
-	public ResponseEntity<Habit> editName(@PathVariable String userID, @PathVariable Long habitID,
+	public ResponseEntity<Habit> editName(@PathVariable Long habitID,
 			@RequestBody Habit newNameHabit) {
-		Habit habit = habitService.editHabitName(userID, habitID, newNameHabit.getName());
+		Habit habit = habitService.editHabitName(habitID, newNameHabit.getName());
 		return new ResponseEntity<>(habit, HttpStatus.ACCEPTED);
 
 	}
 
 	@PutMapping("/habits/{habitID}/{thisDay}")
-	public ResponseEntity<Habit> updateHabit(@PathVariable String userID, @PathVariable Long habitID,
-			@PathVariable int thisDay, @RequestBody Day day) {
-		Habit updatedHabit = habitService.updateHabit(userID, habitID, thisDay, day);
-		if (updatedHabit != null)
-			return new ResponseEntity<>(updatedHabit, HttpStatus.ACCEPTED);
+	public ResponseEntity<Day> updateDay(@RequestBody Day day) {
+		Day updatedDay = habitService.updateDay(day);
+		if (updatedDay != null)
+			return new ResponseEntity<>(updatedDay, HttpStatus.ACCEPTED);
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 
@@ -83,11 +82,10 @@ public class HabitController {
 		return new ResponseEntity<>(timeTillMidnight, HttpStatus.OK);
 	}
 
-	@PutMapping("/habits/{habitID}/{thisDay}/complete")
-	public ResponseEntity<HttpStatus> completeDay(@PathVariable String userID, @PathVariable Long habitID,
-			@PathVariable int thisDay) {
-		Habit habit = habitService.completeDay(userID, habitID, thisDay);
-		if (habit.getDays().get(thisDay).isCompleted())
+	@PutMapping("/habits/{habitID}/{thisDay}/complete/{id}")
+	public ResponseEntity<HttpStatus> completeDay(@PathVariable Long id) {
+		Day day = habitService.completeDay(id);
+		if (day.isCompleted())
 			return new ResponseEntity<>(HttpStatus.OK);
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 

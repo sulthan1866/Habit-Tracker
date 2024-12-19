@@ -46,7 +46,7 @@ public class UserService {
 
 	public Users addBadge(String userID, Long habitID) {
 		Users user = userRepo.findByUserID(userID);
-		Habit habit = habitsRepo.findByUserIDAndHabitID(userID, habitID);
+		Habit habit = habitsRepo.findHabitWithOutDays(habitID);
 		if (habit != null && habit.getCurrDay() >= habit.getNumberOfDays() - 1) {
 			String badge = UserService.getBadgeName(habit);
 			habit.setCurrDay(habit.getCurrDay() + 1);

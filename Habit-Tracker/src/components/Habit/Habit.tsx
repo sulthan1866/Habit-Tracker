@@ -25,7 +25,6 @@ interface Habit {
   numberOfDays: number;
   days: Day[];
   currDay: number;
-
   streak: number;
   maxStreak: number;
 }
@@ -48,12 +47,13 @@ const Habit = () => {
   const { habitID } = useParams<{ habitID: string }>();
   const [reload, setReload] = useState(false);
   const { userID } = useParams<{ userID: string }>();
-  const [DayID, setDayID] = useState<number>(0);
+  const [DayID, setDayID] = useState<number | null>(null);
   const [tasks, setTasks] = useState<string[]>([]);
   const [note, setNote] = useState<string>();
   const [date, setDate] = useState<Date>(new Date());
   const [completed, setCompleted] = useState<boolean>(false);
   const [thisDay, setThisDay] = useState<number>(-1);
+  const [thisDayForRange, setThisDayForRange] = useState<number>(-1);
   const [isCardVisibile, setCardVisibility] = useState<boolean>(false);
   const [isHabitNameEditing, setHabitNameEditing] = useState<boolean>(false);
 
@@ -71,7 +71,6 @@ const Habit = () => {
         Schedule your tasks for tomorrow and complete them to unlock the next
         stage. Your progress is your power!
       </p>
-
       <h5>📊 How to Track Your Progress</h5>
       <p>
         - Click on the next stage (marked in blue) and select <b>Load</b> to
@@ -86,7 +85,6 @@ const Habit = () => {
         - After saving, click <b>Are you doing all these tomorrow?</b> to
         finalize your schedule.
       </p>
-
       <h5>✅ Completing Tasks and Moving Ahead</h5>
       <p>
         On the next day, complete your scheduled tasks and mark them as{" "}
@@ -119,33 +117,15 @@ const Habit = () => {
       const habit_tracker_userID_token = sessionStorage.getItem(
         "habit_tracker_userID_token"
       );
-      if (habit_tracker_userID_token != userID) {
+      if (habit_tracker_userID_token !== userID) {
         throw new Error();
       }
       const userDetails = axios.get(
         `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/user-details`
       );
-      const habitDetails = axios.get(
-        `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/habits/${habitID}`
-      );
-      habitDetails
-        .then((resp) => {
-          if (resp.status == 200) {
-            return resp.data;
-          }
-        })
-        .then((data: Habit) => {
-          setLoading(false);
-          setHabit(data);
-        })
-        .catch(() => {
-          setLoading(false);
-          setError(true);
-          navigate("/login");
-        });
       userDetails
         .then((resp) => {
-          if (resp.status == 200) {
+          if (resp.status === 200) {
             return resp.data;
           }
         })
@@ -161,10 +141,58 @@ const Habit = () => {
     } catch {
       setLoading(false);
       setError(true);
-
       navigate("/login");
     }
-  }, [navigate, userID, habitID, reload]);
+  }, [userID, navigate]);
+
+  useEffect(() => {
+    try {
+      const habitDetails = axios.get(
+        `${
+          import.meta.env.VITE_BASE_API_URL_V1
+        }/${userID}/habits/${habitID}/${thisDayForRange}`
+      );
+      habitDetails
+        .then((resp) => {
+          if (resp.status === 200) {
+            return resp.data;
+          }
+        })
+        .then((data: Habit) => {
+          setLoading(false);
+          setHabit(data);
+
+          if (data.currDay > -1) {
+            const dayIndex = thisDay === -1 ? data.currDay - 1 : thisDay;
+            const selectedDay = data.days[dayIndex] || null;
+
+            setThisDay(dayIndex);
+            setDayID(selectedDay?.id || null);
+            setTasks(selectedDay?.tasks || []);
+            setNote(selectedDay?.note || "");
+            if (data.currDay > -2)
+              setCompleted(data.days[dayIndex - 1]?.completed || false);
+
+            if (dayIndex === data.currDay) {
+              const tomorrow = new Date();
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              setDate(tomorrow);
+            } else if (dayIndex === data.currDay - 1) {
+              setDate(new Date());
+            } else if (selectedDay) {
+              setDate(new Date(selectedDay.date));
+            }
+          }
+        })
+        .catch(() => {
+          setLoading(false);
+          setError(true);
+        });
+    } catch {
+      setLoading(false);
+      setError(true);
+    }
+  }, [userID, habitID, reload, thisDayForRange]);
 
   const deleteHabit = async () => {
     const confirmDelete = confirm(
@@ -175,7 +203,7 @@ const Habit = () => {
       const result = await axios.delete(
         `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/habits/${habitID}`
       );
-      if (result.status == 200) {
+      if (result.status === 200) {
         setMessage("Habit deleted successfully");
         setTimeout(() => {
           navigate(`/${userID}`);
@@ -187,9 +215,12 @@ const Habit = () => {
   };
 
   const onStageSelect = (day: number) => {
+    if (!habit.days[day]) {
+      setThisDayForRange(day);
+    }
     setCardVisibility(true);
     setThisDay(day);
-    setDayID(habit.days[day] ? habit.days[day].id : 0);
+    setDayID(habit.days[day] ? habit.days[day].id : null);
     setTasks(habit?.days[day] ? habit?.days[day].tasks : []);
     setNote(habit?.days[day] ? habit?.days[day].note : "");
     setCompleted(
@@ -197,18 +228,17 @@ const Habit = () => {
         ? habit?.days[habit.currDay - 1].completed
         : false
     );
-    if (day == habit?.currDay) {
-      setDate(new Date(new Date()));
-      date.setDate(new Date().getDate() + 1);
-      setDate(date);
+    if (day === habit?.currDay) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      setDate(tomorrow);
+    } else if (day === habit?.currDay - 1) {
+      setDate(new Date());
     } else {
       setDate(new Date(habit?.days[day].date));
     }
   };
 
-  useEffect(() => {
-    setDayID(habit.days[thisDay] ? habit.days[thisDay].id : 0);
-  }, [thisDay, habit.days]);
   if (loading) return <h1>LOADING</h1>;
   if (error) return <h1>ERROR</h1>;
 
@@ -272,7 +302,7 @@ const Habit = () => {
                 },
                 deleteHabit,
               ]}
-            ></Menu>
+            />
           </div>
 
           <div className="col">
@@ -289,6 +319,7 @@ const Habit = () => {
               reload={reload}
               setReload={setReload}
               id={DayID}
+              setId={setDayID}
               tasks={tasks}
               setTasks={setTasks}
               note={note}
@@ -301,7 +332,7 @@ const Habit = () => {
               thisDay={thisDay}
               currDay={habit.currDay}
               numberOfDays={habit.numberOfDays}
-            ></Card>
+            />
           </div>
           {/* Scrollable Content */}
           <div className="d-inline-flex mt-5 d-flex align-items-center vh-100">
@@ -312,7 +343,7 @@ const Habit = () => {
                   day={i}
                   currDay={habit?.currDay}
                   onStageSelect={onStageSelect}
-                ></Stage>
+                />
               </div>
             ))}
           </div>

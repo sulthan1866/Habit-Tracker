@@ -202,4 +202,39 @@ public class HabitsRepo implements IHabitsRepo {
         dayRepo.flush();
     }
 
+    public Habit saveHabit(Habit habit) {
+        return habitsRepo.save(habit);
+    }
+
+    public Habit findHabitWithOutDays(Long habitid) {
+        return habitsRepo.findById(habitid).get();
+    }
+
+    public List<Habit> findAllHabitsWithOutDays(String userID) {
+        return habitsRepo.findByUserID(userID);
+    }
+
+    public Day findDayById(Long id) {
+        return dayRepo.findById(id).get();
+    }
+
+    public Day saveDay(Day day) {
+        return dayRepo.save(day);
+    }
+
+    public Habit findHabitWithRangeDaysByHabitID(Long habitid, int today) {
+        List<Day> days = dayRepo.findRangeOfDays(habitid, today - 3, today + 3);
+        Habit habit = this.findHabitWithOutDays(habitid);
+        for (int i = 0; i < today - 3; i++) {
+            habit.getDays().add(null);
+        }
+        habit.getDays().addAll(days);
+        return habit;
+
+    }
+
+    @Override
+    public Habit findByHabitID(Long habitid) {
+        return habitsRepo.findByHabitID(habitid);
+    }
 }

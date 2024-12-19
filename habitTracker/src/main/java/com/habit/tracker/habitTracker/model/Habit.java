@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Table(name = "habit")
 public class Habit {
 
 	@Id
@@ -42,14 +44,4 @@ public class Habit {
 
 	}
 
-	public void setDay(Day day, int today) {
-		if (this.days.size() > today && this.days.get(today).getId() >= 1) {
-			this.days.set(today, day);
-			this.days.get(today).setToday(today);
-		} else {
-			day.setId(null);
-			this.days.add(day);
-		}
-
-	}
 }

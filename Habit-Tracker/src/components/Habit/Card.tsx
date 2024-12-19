@@ -8,7 +8,8 @@ import { useParams } from "react-router-dom";
 interface Props {
   reload: boolean;
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
-  id: number;
+  id: number | null;
+  setId: React.Dispatch<React.SetStateAction<number | null>>;
   tasks: string[];
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
   note: string | undefined;
@@ -27,6 +28,7 @@ function Card({
   reload,
   setReload,
   id,
+  setId,
   tasks,
   setTasks,
   note,
@@ -66,13 +68,13 @@ function Card({
         `${
           import.meta.env.VITE_BASE_API_URL_V1
         }/${userID}/habits/${habitID}/${thisDay}`,
-        { id, tasks, date, note }
+        { habitID, id, today: thisDay, tasks, date, note }
       );
       if (result.status == 202) {
         setMessStyle("success");
         setMessage("Saved");
         setChanges(false);
-        if (id == 0) setReload(!reload);
+        if (!id) setId(result.data.id);
       }
     } catch {
       setMessStyle("danger");
@@ -106,10 +108,11 @@ function Card({
       nextElement.textContent = "Did you?";
       return;
     }
+    save();
     const result = await axios.put(
       `${
         import.meta.env.VITE_BASE_API_URL_V1
-      }/${userID}/habits/${habitID}/${thisDay}/complete`
+      }/${userID}/habits/${habitID}/${thisDay}/complete/${id}`
     );
 
     if (result.status == 200) {

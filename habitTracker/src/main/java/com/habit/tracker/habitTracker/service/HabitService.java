@@ -22,45 +22,43 @@ public class HabitService {
 
 	public List<Habit> getHabitsByID(String userID) {
 		try {
-			return repo.findByUserID(userID);
+			return repo.findAllHabitsWithOutDays(userID);
 		} catch (Exception e) {
 			return null;
 		}
 
 	}
 
-	public Habit getHabitByUserIDAndHabitID(String userID, Long habitID) {
-		return repo.findByUserIDAndHabitID(userID, habitID);
+	public Habit getHabitWithRangeDaysByHabitID(Long habitID, int today) {
+		return repo.findHabitWithRangeDaysByHabitID(habitID, today);
 	}
 
 	public Habit addHabit(String userID, String name, int numberOfDays) {
 		if (userService.getUserByID(userID) != null) {
 			Habit habit = new Habit(userID, name, numberOfDays);
-			return repo.save(habit);
+			return repo.saveHabit(habit);
 		}
 		return null;
 	}
 
-	public Habit editHabitName(String userID, Long habitID, String newName) {
-		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
+	public Habit editHabitName(Long habitID, String newName) {
+		Habit habit = repo.findHabitWithOutDays(habitID);
 		habit.setName(newName);
-		return repo.save(habit);
+		return repo.saveHabit(habit);
 	}
 
-	public Habit updateHabit(String userID, Long habitID, int thisDay, Day day) {
-		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
-		habit.setDay(day, thisDay);
-		return repo.save(habit);
+	public Day updateDay(Day day) {
+		return repo.saveDay(day);
 	}
 
 	public void deleteHabitByID(Long habitID) {
 		repo.deleteById(habitID);
 	}
 
-	public Habit completeDay(String userID, Long habitID, int today) {
-		Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
-		habit.getDays().get(today).setCompleted(true);
-		return repo.save(habit);
+	public Day completeDay(Long id) {
+		Day day = repo.findDayById(id);
+		day.setCompleted(true);
+		return repo.saveDay(day);
 	}
 
 	public long moveNextStage(String userID, Long habitID, String timeZone) {
@@ -75,20 +73,20 @@ public class HabitService {
 
 		scheduler.schedule(() -> {
 			try {
-				Habit habit = repo.findByUserIDAndHabitID(userID, habitID);
-				if (habit.getCurrDay() - 1 < 0 || habit.getDays().get(habit.getCurrDay() - 1).isCompleted()) {
-					habit.setCurrDay(habit.getCurrDay() + 1);
-					if (habit.getCurrDay() - 2 < 0 || habit.getDays().get(habit.getCurrDay() - 2).getDate()
-							.toLocalDate()
-							.plusDays(1).isEqual(habit.getDays().get(habit.getCurrDay() - 1).getDate().toLocalDate())) {
-						habit.setStreak(habit.getStreak() + 1);
-						int maxStreak = Math.max(habit.getMaxStreak(), habit.getStreak());
-						habit.setMaxStreak(maxStreak);
-					} else {
-						habit.setStreak(0);
-					}
-					repo.save(habit);
+				Habit h = repo.findHabitWithOutDays(habitID);
+				Habit habit = repo.findHabitWithRangeDaysByHabitID(habitID, h.getCurrDay());
+				habit.setCurrDay(habit.getCurrDay() + 1);
+				if (habit.getCurrDay() - 2 < 0 || habit.getDays().get(habit.getCurrDay() - 2).getDate()
+						.toLocalDate()
+						.plusDays(1).isEqual(habit.getDays().get(habit.getCurrDay() - 1).getDate().toLocalDate())) {
+					habit.setStreak(habit.getStreak() + 1);
+					int maxStreak = Math.max(habit.getMaxStreak(), habit.getStreak());
+					habit.setMaxStreak(maxStreak);
+				} else {
+					habit.setStreak(1);
 				}
+				repo.saveHabit(habit);
+
 			} finally {
 				scheduler.shutdown();
 			}
