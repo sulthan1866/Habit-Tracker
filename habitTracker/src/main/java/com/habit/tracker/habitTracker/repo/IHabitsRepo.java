@@ -14,4 +14,6 @@ public interface IHabitsRepo extends JpaRepository<Habit, Long> {
 
 	Habit findByUserIDAndHabitID(String userID, Long habitID);
 
+	Habit findByHabitID(Long habitid);
+
 }
