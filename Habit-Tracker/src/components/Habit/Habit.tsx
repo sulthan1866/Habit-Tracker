@@ -21,6 +21,7 @@ interface Day {
 
 interface Habit {
   userID: string;
+  postID: number | null;
   name: string;
   numberOfDays: number;
   days: Day[];
@@ -33,6 +34,7 @@ const Habit = () => {
   const [userdata, setUserData] = useState<Users>();
   const [habit, setHabit] = useState<Habit>({
     userID: "",
+    postID: null,
     name: "",
     numberOfDays: 0,
     days: [],
@@ -332,6 +334,7 @@ const Habit = () => {
               thisDay={thisDay}
               currDay={habit.currDay}
               numberOfDays={habit.numberOfDays}
+              postID={habit.postID}
             />
           </div>
           {/* Scrollable Content */}

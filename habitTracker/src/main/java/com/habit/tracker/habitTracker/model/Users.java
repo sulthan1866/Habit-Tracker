@@ -23,7 +23,7 @@ public class Users {
 	private String email;
 	private String password;
 	@Convert(converter = BadgesConverter.class)
-	@Column(columnDefinition = "text")
+	@Column(columnDefinition = "TEXT")
 	private Map<String, Map<String, Integer>> badges;
 
 	public Users(String userID, String email, String password) {

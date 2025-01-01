@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./card.css";
 import { Modal } from "react-bootstrap";
 import AddTask from "./AddTask";
@@ -22,6 +22,7 @@ interface Props {
   thisDay: number;
   currDay: number;
   numberOfDays: number;
+  postID: number | null;
 }
 
 function Card({
@@ -41,12 +42,14 @@ function Card({
   thisDay,
   currDay,
   numberOfDays,
+  postID,
 }: Props) {
   const [isflipped, flip] = useState<boolean>(false);
   const { userID } = useParams<{ userID: string }>();
   const { habitID } = useParams<{ habitID: string }>();
   const [message, setMessage] = useState<string | null>(null);
   const [messStyle, setMessStyle] = useState<string>("");
+  const [taskElements] = useState<HTMLElement[]>([]);
   const [saving, setSaving] = useState<boolean>(false);
   const [hasChanges, setChanges] = useState<boolean>(false);
   const [isMovingNext, setMovingNext] = useState<boolean>(false);
@@ -60,6 +63,13 @@ function Card({
   const flipStyle: React.CSSProperties = {
     transform: isflipped ? "rotateY(180deg)" : "none",
   };
+
+  useEffect(() => {
+    tasks.map((task, i) => {
+      taskElements[i] = document.createElement("div");
+      taskElements[i].innerHTML = task;
+    });
+  }, [taskElements, tasks]);
 
   const save = async () => {
     setSaving(true);
@@ -277,7 +287,13 @@ function Card({
                                   type="checkbox"
                                 />
                               )}
-                              <label className=" col">{task}</label>
+                              <label className=" col">
+                                {
+                                  <div
+                                    dangerouslySetInnerHTML={{ __html: task }}
+                                  />
+                                }
+                              </label>
                             </div>
                           )
                       )}
@@ -291,6 +307,7 @@ function Card({
                         setChanges={setChanges}
                         tasks={tasks}
                         setTasks={setTasks}
+                        postID={postID}
                       ></AddTask>
                       <hr />
                       <button

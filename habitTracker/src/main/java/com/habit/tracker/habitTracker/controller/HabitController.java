@@ -48,7 +48,7 @@ public class HabitController {
 	@PostMapping("/habits")
 	public ResponseEntity<Habit> addHabit(@PathVariable String userID, @RequestBody Habit newHabit) {
 
-		Habit habit = habitService.addHabit(userID, newHabit.getName(), newHabit.getNumberOfDays());
+		Habit habit = habitService.addHabit(userID, null, newHabit.getName(), newHabit.getNumberOfDays());
 		if (habit != null)
 			return new ResponseEntity<>(habit, HttpStatus.CREATED);
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

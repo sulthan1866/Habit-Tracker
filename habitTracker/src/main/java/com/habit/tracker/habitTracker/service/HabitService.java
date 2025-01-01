@@ -15,10 +15,13 @@ import java.util.concurrent.*;
 public class HabitService {
 
 	@Autowired
-	HabitsRepo repo;
+	private HabitsRepo repo;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
+
+	@Autowired
+	private PostInteractionsService postInteractionsService;
 
 	public List<Habit> getHabitsByID(String userID) {
 		try {
@@ -33,12 +36,11 @@ public class HabitService {
 		return repo.findHabitWithRangeDaysByHabitID(habitID, today);
 	}
 
-	public Habit addHabit(String userID, String name, int numberOfDays) {
-		if (userService.getUserByID(userID) != null) {
-			Habit habit = new Habit(userID, name, numberOfDays);
-			return repo.saveHabit(habit);
-		}
-		return null;
+	public Habit addHabit(String userID, Long postID, String name, int numberOfDays) {
+
+		Habit habit = new Habit(userID, postID, name, numberOfDays);
+		return repo.saveHabit(habit);
+
 	}
 
 	public Habit editHabitName(Long habitID, String newName) {
@@ -52,6 +54,9 @@ public class HabitService {
 	}
 
 	public void deleteHabitByID(Long habitID) {
+		Habit habit = repo.getById(habitID);
+		if (habit.getPostID() != null)
+			postInteractionsService.removeHabitFromPost(habit.getPostID(), habit.getUserID());
 		repo.deleteById(habitID);
 	}
 
@@ -76,9 +81,11 @@ public class HabitService {
 				Habit h = repo.findHabitWithOutDays(habitID);
 				Habit habit = repo.findHabitWithRangeDaysByHabitID(habitID, h.getCurrDay());
 				habit.setCurrDay(habit.getCurrDay() + 1);
-				if (habit.getCurrDay() - 2 < 0 || habit.getDays().get(habit.getCurrDay() - 2).getDate()
+				if (habit.getCurrDay() - 2 < 0 || habit.getDays().get(habit.getCurrDay() -
+						2).getDate()
 						.toLocalDate()
-						.plusDays(1).isEqual(habit.getDays().get(habit.getCurrDay() - 1).getDate().toLocalDate())) {
+						.plusDays(1).isEqual(habit.getDays().get(habit.getCurrDay() -
+								1).getDate().toLocalDate())) {
 					habit.setStreak(habit.getStreak() + 1);
 					int maxStreak = Math.max(habit.getMaxStreak(), habit.getStreak());
 					habit.setMaxStreak(maxStreak);

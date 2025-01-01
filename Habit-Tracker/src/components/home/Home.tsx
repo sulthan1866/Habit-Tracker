@@ -67,7 +67,11 @@ const Home = () => {
   );
 
   const navigate = useNavigate();
-
+  // useEffect(() => {
+  //   setUserData({ email: "e2", userID: "wii" });
+  //   setHabits([{ habitID: 4, name: "runn", numberOfDays: 59, currDay: 8 }]);
+  //   setLoading(false);
+  // }, []);
   useEffect(() => {
     try {
       const habit_tracker_userID_token = sessionStorage.getItem(
@@ -145,13 +149,16 @@ const Home = () => {
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
           heading={userdata?.userID}
-          options={["profile"]}
+          options={["Profile", "Posts"]}
           onClicks={[
             () => {
               navigate("profile");
             },
+            () => {
+              navigate("posts");
+            },
           ]}
-        ></Menu>
+        />
         {/* Main Content */}
         <div
           className={`flex-grow-1 ms-auto ${menuOpen ? "content-shifted" : ""}`}

@@ -35,7 +35,7 @@ const Menu = ({ menuOpen, setMenuOpen, heading, options, onClicks }: Props) => {
         className={`position-fixed top-0 h-100 bg-dark text-white ${
           menuOpen ? "slide-in" : "slide-out"
         }`}
-        style={{ width: "250px", transition: "transform 0.3s ease" }}
+        style={{ width: "250px", transition: "transform 0.3s ease", zIndex: 5 }}
       >
         <div className="p-3 text-center">
           <h2>{heading?.substring(0, 12)}</h2>

@@ -4,9 +4,10 @@ interface Props {
   tasks: string[];
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
   setChanges: React.Dispatch<React.SetStateAction<boolean>>;
+  postID: number | null;
 }
 
-const AddTask = ({ tasks, setTasks, setChanges }: Props) => {
+const AddTask = ({ tasks, setTasks, setChanges, postID }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const load = () => {
     if (tasks) {
@@ -19,7 +20,7 @@ const AddTask = ({ tasks, setTasks, setChanges }: Props) => {
 
   const addTask = (task: string | null) => {
     const newTask = document.getElementById("task") as HTMLInputElement;
-    if (newTask.value == "" && !task) return;
+    if (newTask && newTask.value == "" && !task) return;
 
     const text = task ? task : newTask.value;
     const panel = document.getElementById("added");
@@ -39,9 +40,9 @@ const AddTask = ({ tasks, setTasks, setChanges }: Props) => {
     delBtn.onblur = () => {
       delBtn.textContent = "X";
     };
-    taskElement.textContent = text;
+    taskElement.innerHTML = text;
     taskElement.classList.add("bg-light", "rounded", "pt-1", "px-1", "m-1");
-    taskElement.appendChild(delBtn);
+    if (!postID) taskElement.appendChild(delBtn);
     panel?.appendChild(taskElement);
     if (!task) {
       tasks?.push(newTask.value);
@@ -57,14 +58,16 @@ const AddTask = ({ tasks, setTasks, setChanges }: Props) => {
         style={{ visibility: loaded ? "visible" : "hidden" }}
         className="container row"
       >
-        <div className="w-50 col-6">
-          <h4>Add Task</h4>
-          <input id="task" type="text" className="form-control" />
-          <button onClick={() => addTask(null)} className="btn btn-info mt-3">
-            Add
-          </button>
-        </div>
-        <div className="w-50 col-6">
+        {!postID && (
+          <div className="w-50 col">
+            <h4>Add Task</h4>
+            <input id="task" type="text" className="form-control" />
+            <button onClick={() => addTask(null)} className="btn btn-info mt-3">
+              Add
+            </button>
+          </div>
+        )}
+        <div className="w-50 col">
           <div id="added"></div>
         </div>
       </div>
