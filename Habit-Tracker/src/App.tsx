@@ -6,7 +6,7 @@ import Habit from "./components/Habit/Habit";
 import ChangePassword from "./components/login/ChangePassword";
 import Profile from "./components/profile/Profile";
 import EmailChanged from "./components/profile/EmailChanged";
-import Test from "./components/AI/Test";
+// import Test from "./components/AI/Test";
 import Posts from "./components/posts/Posts";
 import Post from "./components/posts/Post";
 import AdminPage from "./components/admin/AdminPage";
@@ -31,7 +31,7 @@ const App = () => {
           <Route path="/:userID/posts/:postID" element={<Post />} />
           <Route path="/:userID/profile" element={<Profile />} />
           <Route path={`/:userID/:habitID`} element={<Habit />} />
-          <Route path={`/:userID/ai`} element={<Test />} />
+          {/* <Route path={`/:userID/ai`} element={<Test />} /> */}
         </Routes>
       </Router>
     </>
