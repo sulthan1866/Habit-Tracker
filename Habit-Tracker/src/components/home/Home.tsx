@@ -67,11 +67,7 @@ const Home = () => {
   );
 
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   setUserData({ email: "e2", userID: "wii" });
-  //   setHabits([{ habitID: 4, name: "runn", numberOfDays: 59, currDay: 8 }]);
-  //   setLoading(false);
-  // }, []);
+
   useEffect(() => {
     try {
       const habit_tracker_userID_token = sessionStorage.getItem(

@@ -26,7 +26,6 @@ public class Habit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long habitID;
-	@Column(unique = true)
 	private Long postID;
 	private String userID;
 	private String name;

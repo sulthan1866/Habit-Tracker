@@ -105,6 +105,7 @@ const Post = () => {
       } finally {
         setAddHabitBtn("Add Habit");
         setAdding(false);
+        setHabitAdded(true);
       }
     }
   };
