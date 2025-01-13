@@ -222,9 +222,9 @@ public class HabitsRepo implements IHabitsRepo {
         return dayRepo.save(day);
     }
 
-    public Habit findHabitWithRangeDaysByHabitID(Long habitid, int today) {
+    public Habit findHabitWithRangeDaysByHabitID(String userID, Long habitid, int today) {
         List<Day> days = dayRepo.findRangeOfDays(habitid, today - 3, today + 3);
-        Habit habit = this.findHabitWithOutDays(habitid);
+        Habit habit = this.findByUserIDAndHabitID(userID, habitid);
         for (int i = 0; i < today - 3; i++) {
             habit.getDays().add(null);
         }

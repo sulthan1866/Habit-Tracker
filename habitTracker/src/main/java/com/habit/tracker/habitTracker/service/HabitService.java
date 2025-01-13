@@ -18,9 +18,6 @@ public class HabitService {
 	private HabitsRepo repo;
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private PostInteractionsService postInteractionsService;
 
 	public List<Habit> getHabitsByID(String userID) {
@@ -32,8 +29,8 @@ public class HabitService {
 
 	}
 
-	public Habit getHabitWithRangeDaysByHabitID(Long habitID, int today) {
-		return repo.findHabitWithRangeDaysByHabitID(habitID, today);
+	public Habit getHabitWithRangeDaysByHabitID(String userID, Long habitID, int today) {
+		return repo.findHabitWithRangeDaysByHabitID(userID, habitID, today);
 	}
 
 	public Habit addHabit(String userID, Long postID, String name, int numberOfDays) {
