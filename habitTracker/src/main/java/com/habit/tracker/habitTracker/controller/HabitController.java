@@ -38,8 +38,9 @@ public class HabitController {
 	}
 
 	@GetMapping("/habits/{habitID}/{today}")
-	public ResponseEntity<Habit> getHabit(@PathVariable Long habitID, @PathVariable int today) {
-		Habit habit = habitService.getHabitWithRangeDaysByHabitID(habitID, today);
+	public ResponseEntity<Habit> getHabit(@PathVariable String userID, @PathVariable Long habitID,
+			@PathVariable int today) {
+		Habit habit = habitService.getHabitWithRangeDaysByHabitID(userID, habitID, today);
 		if (habit == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(habit, HttpStatus.OK);

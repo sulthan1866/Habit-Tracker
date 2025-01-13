@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.habit.tracker.habitTracker.converter.DaysConverter;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
