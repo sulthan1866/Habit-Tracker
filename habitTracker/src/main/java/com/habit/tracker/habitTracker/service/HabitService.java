@@ -76,7 +76,7 @@ public class HabitService {
 		scheduler.schedule(() -> {
 			try {
 				Habit h = repo.findHabitWithOutDays(habitID);
-				Habit habit = repo.findHabitWithRangeDaysByHabitID(habitID, h.getCurrDay());
+				Habit habit = repo.findHabitWithRangeDaysByHabitID(userID, habitID, h.getCurrDay());
 				habit.setCurrDay(habit.getCurrDay() + 1);
 				if (habit.getCurrDay() - 2 < 0 || habit.getDays().get(habit.getCurrDay() -
 						2).getDate()
