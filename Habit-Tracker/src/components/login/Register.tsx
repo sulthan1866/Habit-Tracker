@@ -36,27 +36,35 @@ const Register = () => {
 
   const addUser = async () => {
     setErrorMessage(null);
-    if (userID === "" || password === "")
+    if (userID === "" || password === "") {
       setErrorMessage("Fill in the fields to register");
-    else if (password.length < 8) {
+      return;
+    }
+    if (password.length < 8) {
       setErrorMessage("Password should contain atleast 8 character");
+      return;
     } else if (userID.length > 30) {
       setErrorMessage("Maximum length of userID exceeded");
-    } else
-      try {
-        setRegistering(true);
-        const result = await axios.post(
-          `${import.meta.env.VITE_BASE_API_URL_V1}/register?token=${token}`,
-          { userID, email, password }
-        );
-        if (result.status == 201) {
-          navigate("/login");
-        }
-      } catch {
-        setErrorMessage("User with this user id or E-Mail already exixts");
-      } finally {
-        setRegistering(false);
+      return;
+    }
+    if (userID in ["login", "reset-password", "regester", "404"]) {
+      setErrorMessage("Invalid User ID !!");
+      return;
+    }
+    try {
+      setRegistering(true);
+      const result = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL_V1}/register?token=${token}`,
+        { userID, email, password }
+      );
+      if (result.status == 201) {
+        navigate("/login");
       }
+    } catch {
+      setErrorMessage("User with this user id or E-Mail already exixts");
+    } finally {
+      setRegistering(false);
+    }
   };
 
   return (

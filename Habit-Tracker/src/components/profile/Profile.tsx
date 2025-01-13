@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Menu from "../home/Menu";
+import Loading from "../loading_error/Loading";
+import Error404 from "../loading_error/Error";
 
 interface Users {
   userID: string | undefined;
@@ -123,8 +125,8 @@ const Profile = () => {
     }
   };
 
-  if (loading) return <h1>Loading</h1>;
-  if (error) return <h1>Error</h1>;
+  if (loading) return <Loading />;
+  if (error) return <Error404 />;
   return (
     <div>
       <Menu

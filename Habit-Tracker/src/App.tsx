@@ -12,6 +12,7 @@ import Post from "./components/posts/Post";
 import AdminPage from "./components/admin/AdminPage";
 import AddPost from "./components/admin/AddPost";
 import EditPost from "./components/admin/EditPost";
+import Error404 from "./components/loading_error/Error";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/:userID/posts/:postID" element={<Post />} />
           <Route path="/:userID/profile" element={<Profile />} />
           <Route path={`/:userID/:habitID`} element={<Habit />} />
+          <Route path="/404" element={<Error404 />} />
           {/* <Route path={`/:userID/ai`} element={<Test />} /> */}
         </Routes>
       </Router>

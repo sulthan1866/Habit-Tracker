@@ -5,6 +5,8 @@ import Menu from "./Menu";
 import AddHabit from "./AddHabit";
 import Instructions from "./Instructions";
 import "./badge.css";
+import Loading from "../loading_error/Loading";
+import Error404 from "../loading_error/Error";
 
 interface Users {
   userID: string | undefined;
@@ -129,8 +131,8 @@ const Home = () => {
     setAdding(true);
   };
 
-  if (loading) return <h1>LOADING</h1>;
-  if (error) return <h1>ERROR</h1>;
+  if (loading) return <Loading />;
+  if (error) return <Error404 />;
 
   return (
     <div>

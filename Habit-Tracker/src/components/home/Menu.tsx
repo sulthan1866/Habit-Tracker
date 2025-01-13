@@ -38,7 +38,9 @@ const Menu = ({ menuOpen, setMenuOpen, heading, options, onClicks }: Props) => {
         style={{ width: "250px", transition: "transform 0.3s ease", zIndex: 5 }}
       >
         <div className="p-3 text-center">
-          <h2>{heading?.substring(0, 12)}</h2>
+          <h2 onClick={() => navigate(`/${heading}/profile`)}>
+            {heading?.substring(0, 12)}
+          </h2>
           <hr></hr>
           {options.map((option, i) => (
             <p key={i} onClick={onClicks[i]} style={{ cursor: "pointer" }}>

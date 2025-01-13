@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Like from "./Like";
+import Loading from "../loading_error/Loading";
+import Error404 from "../loading_error/Error";
 
 interface Post {
   postID: number;
@@ -57,7 +60,7 @@ const Post = () => {
           setError(true);
         });
     } catch {
-      navigate("/login");
+      navigate("/404");
       setLoading(false);
       setError(true);
     } finally {
@@ -133,8 +136,8 @@ const Post = () => {
     navigate("./../");
   };
 
-  if (loading) return <h1>Loading</h1>;
-  if (error) return <h1>Error</h1>;
+  if (loading) return <Loading />;
+  if (error) return <Error404 />;
   return (
     <>
       <div className="my-3 row">
@@ -178,13 +181,9 @@ const Post = () => {
         </div>
       </div>
       <div className="d-flex justify-content-end me-5">
-        <button
-          id="likeButton"
-          className={`btn btn-${isliked ? "primary" : "light"}`}
-          onClick={handleLike}
-        >
-          <i className="bi bi-hand-thumbs-up"></i> <span>{likes}</span>
-        </button>
+        <div onClick={handleLike}>
+          <Like likes={likes} isLiked={isliked} setLiked={setLiked} />
+        </div>
       </div>
     </>
   );
