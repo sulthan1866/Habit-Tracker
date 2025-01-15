@@ -14,8 +14,6 @@ public class PostInteractionsService {
     private PostInteractionRepo repo;
 
     public PostInteraction likePost(Long postID, String userID) {
-        if (isLiked(postID, userID))
-            return null;
         PostInteraction like = new PostInteraction(null, postID, userID, "liked");
         return repo.save(like);
     }

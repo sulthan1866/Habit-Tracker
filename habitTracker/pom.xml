@@ -187,17 +187,30 @@
 				2.14.0
 			</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>
-				me.paulschwarz
+				com.google.firebase
 			</groupId>
 			<artifactId>
-				spring-dotenv
+				firebase-admin
 			</artifactId>
 			<version>
-				2.5.4
+				9.0.0
 			</version>
-		</dependency> -->
+		</dependency>
+		<!--
+		<dependency>
+		<groupId>
+		me.paulschwarz
+		</groupId>
+		<artifactId>
+		spring-dotenv
+		</artifactId>
+		<version>
+		2.5.4
+		</version>
+		</dependency>
+		-->
 	</dependencies>
 	<build>
 		<plugins>

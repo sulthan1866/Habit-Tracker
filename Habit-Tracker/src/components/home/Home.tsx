@@ -7,6 +7,7 @@ import Instructions from "./Instructions";
 import "./badge.css";
 import Loading from "../loading_error/Loading";
 import Error404 from "../loading_error/Error";
+import Notification from "../notifications/Notification";
 
 interface Users {
   userID: string | undefined;
@@ -75,11 +76,11 @@ const Home = () => {
       const habit_tracker_userID_token = sessionStorage.getItem(
         "habit_tracker_userID_token"
       );
-      if (
-        habit_tracker_userID_token != userID ||
-        habit_tracker_userID_token == null
-      ) {
+      if (habit_tracker_userID_token == null) {
         throw new Error();
+      } else if (userID == undefined) {
+        navigate(`/${habit_tracker_userID_token}`);
+        return;
       }
       const userDetails = axios.get(
         `${import.meta.env.VITE_BASE_API_URL_V1}/${userID}/user-details`
@@ -140,6 +141,7 @@ const Home = () => {
         <Instructions title="Welcome to Our Habit Tracker App!">
           {instruction}
         </Instructions>
+        <Notification />
       </div>
       <div className="d-flex vh-100 position-relative">
         {/* Sidebar */}

@@ -24,6 +24,9 @@ public class PostService {
     @Autowired
     private PostInteractionsService postInteractionsService;
 
+    @Autowired
+    private FCMService fcmService;
+
     public List<Post> getPosts() {
         return repo.findAllByOrderByPostIDDesc();
     }
@@ -33,6 +36,11 @@ public class PostService {
     }
 
     public Post sendPost(Post post) {
+        try {
+            fcmService.sendPushNotificationToAllUsers("New Post!", post.getHeading());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return repo.save(post);
     }
 
