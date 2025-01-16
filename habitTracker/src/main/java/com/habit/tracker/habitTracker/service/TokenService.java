@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.habit.tracker.habitTracker.model.Token;
 import com.habit.tracker.habitTracker.repo.TokenRepo;
@@ -35,6 +36,7 @@ public class TokenService {
     }
 
     @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+    @Transactional
     public void deleteToken() {
         repo.deleteByExpirationTimeLessThan(LocalDateTime.now());
     }
