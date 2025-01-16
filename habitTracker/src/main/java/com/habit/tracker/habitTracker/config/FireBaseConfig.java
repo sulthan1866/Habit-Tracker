@@ -13,7 +13,7 @@ import com.google.firebase.FirebaseOptions;
 public class FireBaseConfig {
     public FireBaseConfig() throws IOException {
         InputStream service = getClass().getClassLoader().getResourceAsStream(
-                "habit-tracker-1866-firebase-adminsdk-7kguh-eb435d19ac.json");
+                "habit-tracker-1866-firebase-adminsdk-7kguh-afdbcd7eb9.json");
         FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(service))
                 .build();
         if (FirebaseApp.getApps().isEmpty()) {

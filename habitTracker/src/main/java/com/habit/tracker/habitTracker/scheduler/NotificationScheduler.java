@@ -12,7 +12,7 @@ public class NotificationScheduler {
     @Autowired
     private FCMService fcmService;
 
-    @Scheduled(cron = "0 12 20 * * *")
+    @Scheduled(cron = "0 10 21 * * *")
     public void sendNotification() throws Exception {
         fcmService.sendPushNotificationToAllUsers("Daily Remainder", "Start doing your habits now !");
     }
