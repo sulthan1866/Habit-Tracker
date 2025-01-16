@@ -3,6 +3,8 @@ package com.habit.tracker.habitTracker.config;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +18,8 @@ public class FireBaseConfig {
     @Value("${FCM_SDK_KEY}")
     private String serviceAccountString;
 
-    public FireBaseConfig() throws IOException {
+    @PostConstruct
+    public void initFirebase() throws IOException {
         ByteArrayInputStream service = new ByteArrayInputStream(serviceAccountString.getBytes());
         FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(service))
                 .build();
