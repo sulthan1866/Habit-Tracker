@@ -30,7 +30,7 @@ const Login = () => {
 
         if (result.status == 202) {
           setErrorMessage(null);
-          sessionStorage.setItem("habit_tracker_userID_token", result.data);
+          localStorage.setItem("habit_tracker_userID_token", result.data);
           navigate(`/${result.data}`);
         }
       } catch {

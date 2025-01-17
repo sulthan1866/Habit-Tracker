@@ -34,14 +34,14 @@ const Post = () => {
 
   useEffect(() => {
     try {
-      const habit_tracker_userID_token = sessionStorage.getItem(
+      const habit_tracker_userID_token = localStorage.getItem(
         "habit_tracker_userID_token"
       );
-      if (
-        habit_tracker_userID_token != userID ||
-        habit_tracker_userID_token == null
-      ) {
+      if (habit_tracker_userID_token == null) {
         throw new Error();
+      } else if (userID == undefined || userID != habit_tracker_userID_token) {
+        navigate(`/${habit_tracker_userID_token}`);
+        return;
       }
       const post = axios.get(
         `${import.meta.env.VITE_BASE_API_URL_V1}/posts/${postID}`
