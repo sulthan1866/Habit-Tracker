@@ -214,6 +214,24 @@ public class HabitsRepo implements IHabitsRepo {
         return habitsRepo.findByUserID(userID);
     }
 
+    public Habit findHabitWithCurrDay(Long habitID) {
+        Habit habit = habitsRepo.findByHabitID(habitID);
+        List<Day> currDay = dayRepo.findRangeOfDays(habit.getHabitID(), habit.getCurrDay() - 2,
+                habit.getCurrDay());
+        habit.setDays(currDay);
+        return habit;
+    }
+
+    public List<Habit> findAllHabitsWithCurrDay() {
+        List<Habit> habits = habitsRepo.findAll();
+        for (Habit habit : habits) {
+            List<Day> currDay = dayRepo.findRangeOfDays(habit.getHabitID(), habit.getCurrDay() - 2,
+                    habit.getCurrDay());
+            habit.setDays(currDay);
+        }
+        return habits;
+    }
+
     public Day findDayById(Long id) {
         return dayRepo.findById(id).get();
     }
@@ -224,7 +242,8 @@ public class HabitsRepo implements IHabitsRepo {
 
     public Habit findHabitWithRangeDaysByHabitID(String userID, Long habitid, int today) {
         List<Day> days = dayRepo.findRangeOfDays(habitid, today - 3, today + 3);
-        Habit habit = this.findByUserIDAndHabitID(userID, habitid);
+
+        Habit habit = this.findHabitWithOutDays(habitid);
         for (int i = 0; i < today - 3; i++) {
             habit.getDays().add(null);
         }

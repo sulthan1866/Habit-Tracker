@@ -8,8 +8,6 @@ import com.habit.tracker.habitTracker.model.Habit;
 import com.habit.tracker.habitTracker.repo.HabitsRepo;
 
 import java.util.List;
-import java.time.*;
-import java.util.concurrent.*;
 
 @Service
 public class HabitService {
@@ -30,7 +28,8 @@ public class HabitService {
 	}
 
 	public Habit getHabitWithRangeDaysByHabitID(String userID, Long habitID, int today) {
-		return repo.findHabitWithRangeDaysByHabitID(userID, habitID, today);
+		Habit habit = repo.findHabitWithRangeDaysByHabitID(userID, habitID, today);
+		return habit;
 	}
 
 	public Habit addHabit(String userID, Long postID, String name, int numberOfDays) {
@@ -61,44 +60,45 @@ public class HabitService {
 		Day day = repo.findDayById(id);
 		day.setCompleted(true);
 		return repo.saveDay(day);
+		// }
 	}
 
-	public long moveNextStage(String userID, Long habitID, String timeZone) {
+	// public long moveNextStage(String userID, Long habitID, String timeZone) {
 
-		ZoneId zoneId = ZoneId.of(timeZone);
-		ZonedDateTime now = ZonedDateTime.now(zoneId);
-		ZonedDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay(zoneId);
+	// ZoneId zoneId = ZoneId.of(timeZone);
+	// ZonedDateTime now = ZonedDateTime.now(zoneId);
+	// ZonedDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay(zoneId);
 
-		long timeTillMidnight = Duration.between(now, midnight).toMillis();
+	// long timeTillMidnight = Duration.between(now, midnight).toMillis();
+	// timeTillMidnight = 30000;
 
-		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+	// ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-		scheduler.schedule(() -> {
-			try {
-				Habit h = repo.findHabitWithOutDays(habitID);
-				Habit habit = repo.findHabitWithRangeDaysByHabitID(userID, habitID, h.getCurrDay());
-				habit.setCurrDay(habit.getCurrDay() + 1);
-				if (habit.getCurrDay() - 2 < 0 || habit.getDays().get(habit.getCurrDay() -
-						2).getDate()
-						.toLocalDate()
-						.plusDays(1).isEqual(habit.getDays().get(habit.getCurrDay() -
-								1).getDate().toLocalDate())) {
-					habit.setStreak(habit.getStreak() + 1);
-					int maxStreak = Math.max(habit.getMaxStreak(), habit.getStreak());
-					habit.setMaxStreak(maxStreak);
-				} else {
-					habit.setStreak(1);
-				}
-				repo.saveHabit(habit);
+	// scheduler.schedule(() -> {
+	// try {
+	// Habit habit = repo.findHabitWithCurrDay(habitID);
+	// if (habit.getDays().size() == 0)
+	// return;
+	// if (habit.getDays().get(1).isCompleted()) {
+	// if (habit.getDays().get(0).getDate().toLocalDate().plusDays(0)
+	// .isEqual(habit.getDays().get(1).getDate().toLocalDate())) {
 
-			} finally {
-				scheduler.shutdown();
-			}
+	// habit.setStreak(habit.getStreak() + 1);
+	// habit.setMaxStreak(Math.max(habit.getStreak(), habit.getMaxStreak()));
+	// } else {
+	// habit.setStreak(0);
+	// }
+	// habit.setCurrDay(habit.getCurrDay() + 1);
+	// repo.saveHabit(habit);
+	// }
+	// } finally {
+	// scheduler.shutdown();
+	// }
 
-		}, timeTillMidnight, TimeUnit.MILLISECONDS);
+	// }, timeTillMidnight, TimeUnit.MILLISECONDS);
 
-		return timeTillMidnight;
+	// return timeTillMidnight;
 
-	}
+	// }
 
 }

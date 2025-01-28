@@ -184,8 +184,8 @@ const Habit = () => {
               const tomorrow = new Date();
               tomorrow.setDate(tomorrow.getDate() + 1);
               setDate(tomorrow);
-            } else if (dayIndex === data.currDay - 1) {
-              setDate(new Date());
+              // } else if (dayIndex === data.currDay - 1) {
+              //   setDate(new Date());
             } else if (selectedDay) {
               setDate(new Date(selectedDay.date));
             }
@@ -241,8 +241,8 @@ const Habit = () => {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       setDate(tomorrow);
-    } else if (day === habit?.currDay - 1) {
-      setDate(new Date());
+      // } else if (day === habit?.currDay - 1) {
+      //   setDate(new Date());
     } else {
       setDate(new Date(habit?.days[day].date));
     }

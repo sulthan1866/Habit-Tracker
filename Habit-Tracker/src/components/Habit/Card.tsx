@@ -52,9 +52,9 @@ function Card({
   const [taskElements] = useState<HTMLElement[]>([]);
   const [saving, setSaving] = useState<boolean>(false);
   const [hasChanges, setChanges] = useState<boolean>(false);
-  const [isMovingNext, setMovingNext] = useState<boolean>(false);
+  // const [isMovingNext, setMovingNext] = useState<boolean>(false);
   const [habitCompleting, setHabitCompleting] = useState<boolean>(false);
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const CardStyle: React.CSSProperties = {
     visibility: isVisibile ? "visible" : "hidden",
@@ -84,6 +84,7 @@ function Card({
         setMessStyle("success");
         setMessage("Saved");
         setChanges(false);
+        setReload(!reload);
         if (!id) setId(result.data.id);
       }
     } catch {
@@ -118,7 +119,6 @@ function Card({
       nextElement.textContent = "Did you?";
       return;
     }
-    save();
     const result = await axios.put(
       `${
         import.meta.env.VITE_BASE_API_URL_V1
@@ -130,64 +130,64 @@ function Card({
       setMessage(
         "Todays tasks are completed ,schedule for tommorow. keep going!!!"
       );
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
       setCompleted(true);
       setReload(!reload);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     }
   };
-  const moveNext = async () => {
-    if (!completed && thisDay != 0) {
-      setMessStyle("success");
-      setMessage(
-        "Complete today's tasks to schedule it, you can still save it now !"
-      );
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      return;
-    }
-    if (hasChanges) {
-      setMessStyle("warning");
-      setMessage("There are some un saved changes.");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      return;
-    }
-    if (tasks.length == 0) {
-      setMessStyle("danger");
-      setMessage("Add tasks to save !");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      return;
-    }
-    setChanges(false);
-    setMovingNext(true);
-    const r = await axios.put(
-      `${
-        import.meta.env.VITE_BASE_API_URL_V1
-      }/${userID}/habits/${habitID}/next`,
-      { timeZone }
-    );
-    if (r.status == 200) {
-      setMessStyle("success");
-      setMessage("Let's Goo!!!!");
-      setInterval(() => {
-        setMessage(null);
-      }, 5000);
-      setMovingNext(false);
-    } else {
-      setMessStyle("danger");
-      setMessage("Try again later");
-      setInterval(() => {
-        setMessage(null);
-      }, 5000);
-      setMovingNext(false);
-    }
-  };
+  // const moveNext = async () => {
+  //   if (!completed && thisDay != 0) {
+  //     setMessStyle("success");
+  //     setMessage(
+  //       "Complete today's tasks to schedule it, you can still save it now !"
+  //     );
+  //     setTimeout(() => {
+  //     setMessage(null);
+  //   }, 5000);
+  //   return;
+  // }
+  // if (hasChanges) {
+  //   setMessStyle("warning");
+  //   setMessage("There are some un saved changes.");
+  //   setTimeout(() => {
+  //     setMessage(null);
+  //   }, 5000);
+  //   return;
+  // }
+  // if (tasks.length == 0) {
+  //   setMessStyle("danger");
+  //   setMessage("Add tasks to save !");
+  //   setTimeout(() => {
+  //     setMessage(null);
+  //   }, 5000);
+  //   return;
+  // }
+  // setChanges(false);
+  // setMovingNext(true);
+  // const r = await axios.put(
+  //     `${
+  //       import.meta.env.VITE_BASE_API_URL_V1
+  //     }/${userID}/habits/${habitID}/next`,
+  //     { timeZone }
+  //   );
+  //   if (r.status == 200) {
+  //     setMessStyle("success");
+  //     setMessage("Let's Goo!!!!");
+  //     setInterval(() => {
+  //       setMessage(null);
+  //     }, 5000);
+  //     setMovingNext(false);
+  //   } else {
+  //     setMessStyle("danger");
+  //     setMessage("Try again later");
+  //     setInterval(() => {
+  //       setMessage(null);
+  //     }, 5000);
+  //     setMovingNext(false);
+  //   }
+  // };
 
   const habitCompleted = async () => {
     setHabitCompleting(true);
@@ -310,14 +310,14 @@ function Card({
                         postID={postID}
                       ></AddTask>
                       <hr />
-                      <button
+                      {/* <button
                         onClick={moveNext}
                         className="btn btn-success mt-2"
                         disabled={isMovingNext}
                       >
                         Are you doing all these tommorow ?
                       </button>
-                      <br />
+                      <br /> */}
                       <div className="d-flex justify-content-end">
                         <button
                           className="btn m-1 me-5 btn-info"

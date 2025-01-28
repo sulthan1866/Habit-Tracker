@@ -1,8 +1,6 @@
 package com.habit.tracker.habitTracker.controller;
 
-import java.time.ZoneId;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,16 +70,18 @@ public class HabitController {
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 
-	@PutMapping("/habits/{habitID}/next")
-	public ResponseEntity<Long> moveNextStage(@PathVariable String userID, @PathVariable Long habitID,
-			@RequestBody Map<String, String> timeZoneBody) {
-		String timeZone = timeZoneBody.get("timeZone");
-		if (!ZoneId.getAvailableZoneIds().contains(timeZone))
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		long timeTillMidnight = habitService.moveNextStage(userID, habitID, timeZone);
+	// @PutMapping("/habits/{habitID}/next")
+	// public ResponseEntity<Long> moveNextStage(@PathVariable String userID,
+	// @PathVariable Long habitID,
+	// @RequestBody Map<String, String> timeZoneBody) {
+	// String timeZone = timeZoneBody.get("timeZone");
+	// if (!ZoneId.getAvailableZoneIds().contains(timeZone))
+	// return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	// long timeTillMidnight = habitService.moveNextStage(userID, habitID,
+	// timeZone);
 
-		return new ResponseEntity<>(timeTillMidnight, HttpStatus.OK);
-	}
+	// return new ResponseEntity<>(timeTillMidnight, HttpStatus.OK);
+	// }
 
 	@PutMapping("/habits/{habitID}/{thisDay}/complete/{id}")
 	public ResponseEntity<HttpStatus> completeDay(@PathVariable Long id) {
