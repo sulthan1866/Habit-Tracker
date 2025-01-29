@@ -24,7 +24,8 @@ export const requestPermissionForNotification = async (): Promise<
 };
 
 onMessage(messaging, (payload) => {
-  const title = payload.data?.title || "Habit-Tracker";
-  const body = payload.data?.body;
-  new Notification(title, { body });
+  const title = payload.notification?.title || "Habit-Tracker";
+  const body = payload.notification?.body;
+  const icon = payload.notification?.icon;
+  new Notification(title, { body, icon });
 });

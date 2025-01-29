@@ -25,13 +25,12 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.icon || "/firebase-logo.png",
+    icon: payload.notification.icon || "/1866Logo.png",
   };
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-self.addEventListener("click", (event) => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-
-  window.open("https://habitater.netlify.app/");
+  event.waitUntil(clients.openWindow("https://habitater.netlify.app"));
 });

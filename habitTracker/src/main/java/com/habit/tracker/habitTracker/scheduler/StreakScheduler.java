@@ -47,8 +47,9 @@ public class StreakScheduler {
             if (numDays == 1 || habit.getDays().get(numDays - 2).isCompleted()) {
 
                 habit.setCurrDay(habit.getCurrDay() + 1);
-                habitsRepo.saveHabit(habit);
+
             }
+            habitsRepo.saveHabit(habit);
 
         }
     }

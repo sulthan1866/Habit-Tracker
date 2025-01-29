@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import com.habit.tracker.habitTracker.model.FCMToken;
 import com.habit.tracker.habitTracker.repo.FCMRepo;
 
@@ -37,7 +38,10 @@ public class FCMService {
     }
 
     public void sendPushNotification(String title, String body, FCMToken token) throws Exception {
-        Message message = Message.builder().putData("title", title).putData("body", body).setToken(token.getToken())
+
+        Notification notification = Notification.builder().setTitle(title).setBody(body).build();
+
+        Message message = Message.builder().setToken(token.getToken()).setNotification(notification)
                 .build();
         FirebaseMessaging.getInstance().send(message);
     }
@@ -45,7 +49,8 @@ public class FCMService {
     public void sendPushNotificationToAllUsers(String title, String body) throws Exception {
         List<FCMToken> tokens = fcmRepo.findAll();
         for (FCMToken token : tokens) {
-            Message message = Message.builder().putData("title", title).putData("body", body).setToken(token.getToken())
+            Notification notification = Notification.builder().setTitle(title).setBody(body).build();
+            Message message = Message.builder().setToken(token.getToken()).setNotification(notification)
                     .build();
             FirebaseMessaging.getInstance().send(message);
         }
