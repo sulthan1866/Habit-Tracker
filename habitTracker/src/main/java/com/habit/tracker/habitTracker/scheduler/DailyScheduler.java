@@ -1,5 +1,6 @@
 package com.habit.tracker.habitTracker.scheduler;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,35 +22,47 @@ public class DailyScheduler {
         List<Habit> habits = habitsRepo.findAllHabitsWithCurrDay();
 
         for (Habit habit : habits) {
-            int numDays = habit.getDays().size();
-            if (numDays == 1) {
-                habit.setStreak(habit.getStreak() + 1);
-                habit.setMaxStreak(Math.max(habit.getStreak(), habit.getMaxStreak()));
-            } else if (numDays != 0) {
-                if (habit.getDays().get(numDays - 1).getToday() != habit.getCurrDay()) {
-                    if (habit.getDays().get(numDays - 1).getDate().toLocalDate()
-                            .isEqual(LocalDate.now())) {
-                        habit.setStreak(habit.getStreak() + 1);
-                        habit.setMaxStreak(Math.max(habit.getStreak(), habit.getMaxStreak()));
+            try {
+                int numDays = habit.getDays().size();
+                if (numDays == 1) {
+                    habit.setStreak(habit.getStreak() + 1);
+                    habit.setMaxStreak(Math.max(habit.getStreak(), habit.getMaxStreak()));
+                } else if (numDays != 0) {
+                    if (habit.getDays().get(numDays - 1).getToday() != habit.getCurrDay()) {
+                        if (habit.getDays().get(numDays - 1).getDate() == null) {
+                            habit.getDays().get(numDays - 1).setDate(Date.valueOf(LocalDate.now().plusDays(1)));
+                        }
+                        if (habit.getDays().get(numDays - 1).getDate().toLocalDate()
+                                .isEqual(LocalDate.now())) {
+                            habit.setStreak(habit.getStreak() + 1);
+                            habit.setMaxStreak(Math.max(habit.getStreak(), habit.getMaxStreak()));
+                        } else {
+                            habit.setStreak(0);
+                        }
+                    } else if (habit.getDays().get(numDays - 2).getDate() == null) {
+                        habit.getDays().get(numDays - 2).setDate(Date.valueOf(LocalDate.now().plusDays(1)));
+
+                        if (habit.getDays().get(numDays - 2).getDate().toLocalDate()
+                                .isEqual(LocalDate.now())) {
+                            habit.setStreak(habit.getStreak() + 1);
+                            habit.setMaxStreak(Math.max(habit.getStreak(), habit.getMaxStreak()));
+                        }
                     } else {
                         habit.setStreak(0);
                     }
-                } else if (habit.getDays().get(numDays - 2).getDate().toLocalDate()
-                        .isEqual(LocalDate.now())) {
-                    habit.setStreak(habit.getStreak() + 1);
-                    habit.setMaxStreak(Math.max(habit.getStreak(), habit.getMaxStreak()));
-                } else {
-                    habit.setStreak(0);
                 }
-            }
-            if (numDays == 0 || habit.getDays().get(numDays - 1).getToday() != habit.getCurrDay())
+                if (numDays == 0 || habit.getDays().get(numDays - 1).getToday() != habit.getCurrDay())
+                    continue;
+                if (numDays == 1 || habit.getDays().get(numDays - 2).isCompleted()) {
+
+                    habit.setCurrDay(habit.getCurrDay() + 1);
+
+                }
+                habitsRepo.saveHabit(habit);
+            } catch (Exception e) {
+                e.printStackTrace();
                 continue;
-            if (numDays == 1 || habit.getDays().get(numDays - 2).isCompleted()) {
-
-                habit.setCurrDay(habit.getCurrDay() + 1);
-
             }
-            habitsRepo.saveHabit(habit);
 
         }
     }
