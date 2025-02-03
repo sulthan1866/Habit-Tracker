@@ -59,8 +59,8 @@ public class DailyScheduler {
 
                 }
                 habitsRepo.saveHabit(habit);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
                 continue;
             }
 
