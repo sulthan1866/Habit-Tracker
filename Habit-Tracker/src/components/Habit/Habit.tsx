@@ -82,12 +82,8 @@ const Habit = () => {
       </p>
       <p>
         - Plan your tasks for tomorrow by flipping the card (click <b>{`<`}</b>
-        ), add any notes on the backside, and then click <b>Save</b> to confirm
+        ), add any notes on the backside, and then click <b>save</b> to save
         your tasks.
-      </p>
-      <p>
-        - After saving, click <b>Are you doing all these tomorrow?</b> to
-        finalize your schedule.
       </p>
       <h5>✅ Completing Tasks and Moving Ahead</h5>
       <p>
