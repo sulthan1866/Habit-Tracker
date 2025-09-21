@@ -1,0 +1,45 @@
+heading:Cue-Routine-Reward
+
+num of days: 1
+
+img link:https://miro.medium.com/max/2000/1*X5918r9M71zPG6VCgxfkvw.png
+
+content:
+ <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', padding: '20px', maxWidth: '800px', margin: 'auto' }}>
+      
+      <h1 style={{ color: '#333', borderBottom: '2px solid #4CAF50', paddingBottom: '5px' }}>Understanding the Framework</h1>
+
+      <h3>
+        <br/>
+        <p>
+          The Cue-Routine-Reward system breaks down habit formation into three essential elements. By understanding these, you can create habits that stick.
+        </p>
+        <div style={{ marginLeft: '20px', listStyle: 'disc' }}>
+          <strong>Cue:</strong> A trigger or signal that starts the habit.<br/>
+          <strong>Routine:</strong> The action you want to establish as a habit.<br/>
+          <strong>Reward:</strong> The benefit or satisfaction that reinforces the habit.<br/>
+        </div>
+      </h3>
+      <br/><br/>
+      <h1 style={{ color: '#333', borderBottom: '2px solid #4CAF50', paddingBottom: '5px' }}>Steps to Build a Habit</h1>
+      <h3>
+        <div style={{ marginLeft: '20px', padding: '10px', background: '#f9f9f9', borderRadius: '5px' }}>
+          <strong>Identify the Cue:</strong> Choose a consistent trigger to begin your habit.<br/>
+          <strong>Define the Routine:</strong> Specify the exact behavior you wish to perform.<br/>
+          <strong>Choose a Reward:</strong> Pick a reward that motivates and reinforces the habit.<br/>
+          <strong>Repeat Consistently:</strong> Practice daily to establish the habit firmly.<br/>
+        </div>
+      </h3>
+      <br/><br/>
+      <h1 style={{ color: '#333', borderBottom: '2px solid #4CAF50', paddingBottom: '5px' }}>Tips for Success</h1>
+      <h3>
+        <p>
+          Start small—build momentum with manageable steps. Be patient; forming habits takes time. If you miss a day, don’t stress; get back on track quickly.
+        </p>
+        <p style={{ background: '#e8f5e9', padding: '10px', borderRadius: '5px', color: '#2e7d32' }}>
+          Remember: Consistency is the key to transforming routines into automatic habits.
+        </p>
+      </h3>
+    </div>
+
+querry: ""

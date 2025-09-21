@@ -18,7 +18,6 @@ public class FCMToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fcmTokenID;
-    @Column(unique = true)
     private String userID;
     @Column(unique = true)
     private String token;

@@ -1,0 +1,58 @@
+heading:Python 21
+
+num of days: 21
+
+img link:https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200807232652/How-to-Learn-Python-in-21-Days.jpg
+
+content:
+<div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h2 style={{ color: '#4CAF50' }}>Why Should You Learn Python?</h2>
+      <p>
+        Python has become one of the most popular programming languages in the world, 
+        and for good reason. It's versatile, easy to learn, and powerful. Here are some key reasons to learn Python:
+      </p>
+      <ul>
+        <li>🧩 <strong>Beginner-Friendly:</strong> Python's syntax is clean and intuitive, making it perfect for beginners.</li>
+        <li>🚀 <strong>Versatile:</strong> From web development to data science, machine learning, and automation, Python has you covered.</li>
+        <li>🌐 <strong>Massive Community:</strong> A large community means plenty of resources, libraries, and frameworks to accelerate your learning.</li>
+        <li>📈 <strong>In-Demand:</strong> Python developers are highly sought after, with excellent job prospects and competitive salaries.</li>
+        <li>🤖 <strong>Future-Proof:</strong> As AI and data-driven industries grow, Python will continue to play a central role.</li>
+      </ul>
+      <p>
+        Ready to start your Python journey? Check out this amazing resource to 
+        <a 
+          href="https://www.geeksforgeeks.org/how-to-learn-python-in-21-days/" 
+          target="_blank" 
+          style={{ textDecoration: 'none', color: '#007BFF', fontWeight: 'bold' }}
+        >
+          learn Python in just 21 days!
+        </a>
+      </p>
+      <blockquote style={{ marginTop: '20px', fontStyle: 'italic', color: '#555' }}>
+        "The best time to learn Python was yesterday. The second-best time is today."
+      </blockquote>
+    </div>
+
+querry: 
+INSERT INTO DAYS (HABITID, TODAY, TASKS, NOTE, DATE, IS_COMPLETED) VALUES 
+('defaultHabitID', 0,ARRAY['<a href="https://www.geeksforgeeks.org/python-introduction/">Introduction to Python</a>', '<a href="https://www.geeksforgeeks.org/how-to-install-python-on-windows/">Installing Python</a>', '<a href="https://www.geeksforgeeks.org/python-hello-world-program/">Hello World in Python</a>'], '', NULL, false),
+('defaultHabitID', 1,ARRAY['<a href="https://www.geeksforgeeks.org/python-syntax/">Python Syntax</a>', '<a href="https://www.geeksforgeeks.org/python-comments/">Python Comments</a>', '<a href="https://www.geeksforgeeks.org/python-variables/">Variables in Python</a>'], '', NULL, false),
+('defaultHabitID', 2,ARRAY['<a href="https://www.geeksforgeeks.org/python-data-types/">Data Types</a>', '<a href="https://www.geeksforgeeks.org/python-type-conversion/">Type Conversion</a>', '<a href="https://www.geeksforgeeks.org/python-input-and-output/">Input and Output</a>'], '', NULL, false),
+('defaultHabitID', 3,ARRAY['<a href="https://www.geeksforgeeks.org/python-operators/">Operators in Python</a>', '<a href="https://www.geeksforgeeks.org/python-conditional-statements/">Conditional Statements</a>', '<a href="https://www.geeksforgeeks.org/python-loops/">Loops in Python</a>'], '', NULL, false),
+('defaultHabitID', 4,ARRAY['<a href="https://www.geeksforgeeks.org/python-functions/">Functions</a>', '<a href="https://www.geeksforgeeks.org/python-recursion/">Recursion</a>', '<a href="https://www.geeksforgeeks.org/python-lambda/">Lambda Functions</a>'], '', NULL, false),
+('defaultHabitID', 5,ARRAY['<a href="https://www.geeksforgeeks.org/python-string/">Strings in Python</a>', '<a href="https://www.geeksforgeeks.org/python-string-methods/">String Methods</a>', '<a href="https://www.geeksforgeeks.org/python-f-strings/">Formatted Strings</a>'], '', NULL, false),
+('defaultHabitID', 6,ARRAY['<a href="https://www.geeksforgeeks.org/python-lists/">Lists in Python</a>', '<a href="https://www.geeksforgeeks.org/python-list-methods/">List Methods</a>', '<a href="https://www.geeksforgeeks.org/python-list-comprehension/">List Comprehensions</a>'], '', NULL, false),
+('defaultHabitID', 7,ARRAY['<a href="https://www.geeksforgeeks.org/python-tuples/">Tuples</a>', '<a href="https://www.geeksforgeeks.org/python-dictionaries/">Dictionaries</a>', '<a href="https://www.geeksforgeeks.org/python-sets/">Sets</a>'], '', NULL, false),
+('defaultHabitID', 8,ARRAY['<a href="https://www.geeksforgeeks.org/python-oops-concepts/">OOP in Python</a>', '<a href="https://www.geeksforgeeks.org/python-classes-and-objects/">Classes and Objects</a>', '<a href="https://www.geeksforgeeks.org/python-inheritance/">Inheritance</a>'], '', NULL, false),
+('defaultHabitID', 9,ARRAY['<a href="https://www.geeksforgeeks.org/python-file-handling/">File Handling</a>', '<a href="https://www.geeksforgeeks.org/python-json/">JSON in Python</a>', '<a href="https://www.geeksforgeeks.org/python-os-module/">OS Module</a>'], '', NULL, false),
+('defaultHabitID', 10,ARRAY['<a href="https://www.geeksforgeeks.org/python-exception-handling/">Exception Handling</a>', '<a href="https://www.geeksforgeeks.org/python-assert/">Assertions</a>', '<a href="https://www.geeksforgeeks.org/python-logging/">Logging</a>'], '', NULL, false),
+('defaultHabitID', 11,ARRAY['<a href="https://www.geeksforgeeks.org/python-numpy/">NumPy Basics</a>', '<a href="https://www.geeksforgeeks.org/python-pandas/">Pandas Basics</a>', '<a href="https://www.geeksforgeeks.org/python-matplotlib/">Matplotlib Basics</a>'], '', NULL, false),
+('defaultHabitID', 12,ARRAY['<a href="https://www.geeksforgeeks.org/python-regular-expressions/">Regular Expressions</a>', '<a href="https://www.geeksforgeeks.org/python-decorators/">Decorators</a>', '<a href="https://www.geeksforgeeks.org/python-generators/">Generators</a>'], '', NULL, false),
+('defaultHabitID', 13,ARRAY['<a href="https://www.geeksforgeeks.org/python-web-scraping/">Web Scraping</a>', '<a href="https://www.geeksforgeeks.org/python-requests-module/">Requests Module</a>', '<a href="https://www.geeksforgeeks.org/python-beautifulsoup/">BeautifulSoup</a>'], '', NULL, false),
+('defaultHabitID', 14,ARRAY['<a href="https://www.geeksforgeeks.org/python-sqlite/">SQLite in Python</a>', '<a href="https://www.geeksforgeeks.org/python-mysql/">MySQL in Python</a>', '<a href="https://www.geeksforgeeks.org/python-sqlalchemy/">SQLAlchemy Basics</a>'], '', NULL, false),
+('defaultHabitID', 15,ARRAY['<a href="https://www.geeksforgeeks.org/python-flask/">Introduction to Flask</a>', '<a href="https://www.geeksforgeeks.org/flask-routing/">Flask Routing</a>', '<a href="https://www.geeksforgeeks.org/flask-templates/">Flask Templates</a>'], '', NULL, false),
+('defaultHabitID', 16,ARRAY['<a href="https://www.geeksforgeeks.org/python-django/">Introduction to Django</a>', '<a href="https://www.geeksforgeeks.org/django-models/">Django Models</a>', '<a href="https://www.geeksforgeeks.org/django-templates/">Django Templates</a>'], '', NULL, false),
+('defaultHabitID', 17,ARRAY['<a href="https://www.geeksforgeeks.org/python-selenium/">Selenium Basics</a>', '<a href="https://www.geeksforgeeks.org/python-selenium-webdriver/">Selenium WebDriver</a>', '<a href="https://www.geeksforgeeks.org/python-automation-using-selenium/">Automation with Selenium</a>'], '', NULL, false),
+('defaultHabitID', 18,ARRAY['<a href="https://www.geeksforgeeks.org/python-unit-testing/">Unit Testing in Python</a>', '<a href="https://www.geeksforgeeks.org/python-unittest-module/">Unittest Module</a>', '<a href="https://www.geeksforgeeks.org/python-pytest/">Pytest Basics</a>'], '', NULL, false),
+('defaultHabitID', 19,ARRAY['<a href="https://www.geeksforgeeks.org/python-tkinter/">Tkinter Basics</a>', '<a href="https://www.geeksforgeeks.org/python-tkinter-widgets/">Tkinter Widgets</a>', '<a href="https://www.geeksforgeeks.org/python-tkinter-event-handling/">Tkinter Event Handling</a>'], '', NULL, false),
+('defaultHabitID', 20,ARRAY['<a href="https://www.geeksforgeeks.org/python-projects-for-beginners/">Python Projects for Beginners</a>', '<a href="https://www.geeksforgeeks.org/best-practices-for-python-development/">Best Practices</a>', '<a href="https://www.geeksforgeeks.org/python-interview-questions/">Python Interview Questions</a>'], '', NULL, false);
